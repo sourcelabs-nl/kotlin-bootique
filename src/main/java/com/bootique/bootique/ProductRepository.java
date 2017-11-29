@@ -17,6 +17,8 @@ public class ProductRepository {
     static {
         products.put("1", new Product("1", "iPhone X", "Apple", new BigDecimal("989.99")));
         products.put("2", new Product("2", "Galaxy S8", "Samsung", new BigDecimal("699.99")));
+        products.put("3", new Product("3", "3310", "Nokia", new BigDecimal("19.95")));
+        products.put("4", new Product("4", "Kermit", "KPN", new BigDecimal("6.95")));
     }
 
     public List<Product> getProducts() {

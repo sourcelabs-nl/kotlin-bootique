@@ -26,7 +26,7 @@ public class BootiqueController {
         return basketRepository.getBasketById(id);
     }
 
-    @PostMapping(path = "/baskets/{id}/items", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/baskets/{id}/items", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Basket addToBasket(@PathVariable("id") String id, @RequestBody OrderItem orderItem) {
         Product productById = productRepository.getProductById(orderItem.getProductId());
         Basket basket = basketRepository.getBasketById(id);

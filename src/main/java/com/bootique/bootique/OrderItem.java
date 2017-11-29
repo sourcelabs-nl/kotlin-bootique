@@ -1,6 +1,7 @@
 package com.bootique.bootique;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
 
@@ -11,7 +12,7 @@ public class OrderItem {
     private BigDecimal price;
 
     @JsonCreator
-    public OrderItem(String productId, int quantity) {
+    public OrderItem(@JsonProperty("productId") String productId, @JsonProperty("quantity") int quantity) {
         this.productId = productId;
         this.quantity = quantity;
         this.price = price;
