@@ -75,4 +75,6 @@ You can start your journey by switching to the exercise-1 branch either by using
 git checkout exercise-1
 ```
 
+The exercises can be found in the [./exercises](exercises) folder.
+
 Enjoy the ride!
