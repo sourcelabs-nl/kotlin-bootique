@@ -1,3 +1,3 @@
 ## Kotlin Bootique
 
-Documentation can be found in the [docs](./docs/) folder.
+Documentation can be found in the [introduction](./docs/introduction.md) guide.
