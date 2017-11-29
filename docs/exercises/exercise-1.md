@@ -1,28 +1,16 @@
-## Exercise 1 - prepare project
+## Exercise 1: prepare your project for Kotlin
 
-Start the application by running the BootiqueApplication.
+### Add Kotlin to your maven project
 
-Explore the API using Swagger: http://localhost:8080/swagger-ui.html
-
-You can add items to the basket via Swagger or using CURL
-
-```                                                                                                                                                                                                                                                                                                                                                            
-curl -H "Content-Type: application/json" -X POST -d '{"productId":"1","quantity":2}' http://localhost:8080/baskets/1/items
-curl -H "Content-Type: application/json" -X POST -d '{"productId":"2","quantity":4}' http://localhost:8080/baskets/1/items
-```
-
-We will convert this application to Kotlin.
-
-### Add the Kotlin runtime and dependencies
-
-Configure the maven project to use kotlin. Add a maven property that defines the kotlin version:
+Configure your maven pom.xml to use Kotlin. For easy of configuration we add a maven property that defines the Kotlin version:
 ```xml
-<propties>
+<properties>
+    ...
     <kotlin.version>1.2.0</kotlin.version>
-</propties>
+</properties>
 ```
 
-Add kotlin dependencies, we will use the Java >8 target runtime
+Add kotlin dependencies, we will use the Java 8+ target runtime
 ```xml
 <dependency>
     <groupId>org.jetbrains.kotlin</groupId>
