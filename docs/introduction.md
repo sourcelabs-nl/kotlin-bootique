@@ -10,14 +10,22 @@ In this tutorial the Java version of this application will be converted to Kotli
 
 ### Prerequisites
 
-This tutorial assumes that you have some basic knowledge about Java 8, Maven and Spring Boot (Web).
+This tutorial assumes that you have some basic knowledge about Java 8, Maven, Git and Spring Boot (Web).
+
+First, clone this project to your local machine:
+
+```
+git clone https://github.com/soudmaijer/kotlin-bootique.git
+```
 
 Install JDK8+ and IntelliJ (Ultimate Edition, trail is also fine).
 
 
 ### Build the application
 
-Build the project with maven by issues the following command:
+Open the project with IntelliJ or go with your favorite terminal application to the location where you just cloned the project. 
+
+You can build the project using maven by firing the following command:
 
 ```
 ./mvnw clean install
