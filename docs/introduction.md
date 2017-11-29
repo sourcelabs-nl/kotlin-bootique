@@ -1,6 +1,5 @@
 ## Introduction
 
-
 This tutorial assumes that you have some basic knowledge about Java 8, Maven and Spring Boot.
 
 You need to have Java 8+ and IntelliJ installed.
@@ -35,4 +34,16 @@ curl -H "Content-Type: application/json" -X POST -d '{"productId":"2","quantity"
 
 ### Next steps
 
-We will convert this application to Kotlin. You can start your journey with [exercise-1.md](./exercises/exercise-1.md) now!
+Make sure the application is working before start converting this application to Kotlin. 
+
+This workshop consist of several exercises that guide you through the process. Each of the exercises are in an seperate git branch. 
+
+By checking out a new exercise you will start of with a working implementation of the previous exercise.
+
+You can start your journey by switching to the exercise-1 branch either by using IntelliJ or issue the following command in your terminal:
+
+```
+git checkout exercise-1
+```
+
+Enjoy the ride!
