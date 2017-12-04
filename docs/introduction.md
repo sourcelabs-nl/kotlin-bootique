@@ -102,7 +102,7 @@ curl -H "Content-Type: application/json" -X POST -d '{"productId":"2","quantity"
 
 This workshop consist of several exercises that guide you through the process. Each of the exercises are in an separate git branch. 
 
-By checking out a new exercise you will start of with a working implementation of the previous exercise.
+By checking out a each new exercise you can start with a working implementation of the previous exercise.
 
 You can start your journey by switching to the exercise-1 branch either by using IntelliJ or issue the following command in your terminal:
 
@@ -110,6 +110,6 @@ You can start your journey by switching to the exercise-1 branch either by using
 git checkout exercise-1
 ```
 
-The exercises can be found in the [./exercises](exercises/exercise-1.md) folder.
+The exercises can be found in the [./exercises/](exercises/exercise-1.md) folder.
 
 Enjoy the ride!
