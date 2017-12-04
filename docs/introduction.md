@@ -4,9 +4,9 @@ Welcome to the Kotlin workshop. During this workshop you are going to convert an
 
 The Kotlin Bootique application is currently written in Java. It provides a very minimalistic implementation of an API for a Webshop. Consisting of the following functionality provided by RESTful endpoints:
 
-- /products: retrieving product and price information
-- /baskets/{id}: retrieving an overview of a shopping basket
-- /baskets/{id}/items: being able to add item to your basket
+- _/products_: retrieving product and price information
+- _/baskets/{id}_: retrieving an overview of a shopping basket
+- _/baskets/{id}/items_: being able to add item to your basket
 
 Step-by-step you are going to convert the code to Kotlin. If you are able to successfully complete this workshop, you should have enough knowledge to start using Kotlin in any of your (existing) Java projects.
 
