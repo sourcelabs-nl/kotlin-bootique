@@ -2,6 +2,9 @@ package com.bootique.bootique;
 
 import java.math.BigDecimal;
 
+/**
+ * A product that can be bought.
+ */
 public class Product {
 
     private final String id;

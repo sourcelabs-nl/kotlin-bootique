@@ -9,6 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Dummy implementation of a Product persistent store, keeps the products in memory.
+ *
+ * We use a map here just to have something else than a List ;-)
+ */
 @Repository
 public class ProductRepository {
 

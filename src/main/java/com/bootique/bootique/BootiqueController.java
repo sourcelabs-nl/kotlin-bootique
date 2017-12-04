@@ -5,17 +5,20 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * RESTful endpoints are exposed in this component.
+ */
 @RestController
 public class BootiqueController {
 
-    private ProductRepository productRepository;
-    private BasketRepository basketRepository;
+    private final ProductRepository productRepository;
+    private final BasketRepository basketRepository;
 
     public BootiqueController(ProductRepository productRepository, BasketRepository basketRepository) {
         this.productRepository = productRepository;
         this.basketRepository = basketRepository;
     }
-
+    
     @GetMapping({"/", "/products"})
     public List<Product> products() {
         return productRepository.getProducts();

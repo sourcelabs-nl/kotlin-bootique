@@ -5,19 +5,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
 
+/**
+ * Represents the product, quantity and price of an item in the Basket.
+ */
 public class OrderItem {
 
-    private String productId;
-    private int quantity;
-    private BigDecimal price;
+    private final String productId;
+    private final int quantity;
+    private final BigDecimal price;
 
     @JsonCreator
     public OrderItem(@JsonProperty("productId") String productId, @JsonProperty("quantity") int quantity) {
-        this.productId = productId;
-        this.quantity = quantity;
-        this.price = price;
+        this(productId, quantity, BigDecimal.ZERO);
     }
-
 
     public OrderItem(String productId, int quantity, BigDecimal price) {
         this.productId = productId;
@@ -37,6 +37,11 @@ public class OrderItem {
         return price;
     }
 
+    /**
+     * Calculates the totalPrice of this item: price * quantity
+     *
+     * @return BigDecimal.ZERO if no price is define
+     */
     public BigDecimal getTotalPrice() {
         return price.multiply(new BigDecimal(quantity));
     }
