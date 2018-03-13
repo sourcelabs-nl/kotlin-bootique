@@ -14,7 +14,6 @@ Step-by-step you are going to convert the code to Kotlin. If you are able to suc
 
 This tutorial assumes that you have some basic knowledge about Java 8, Maven, Git and Spring Boot (Web).
 
-
 #### Git
 
 Download and install git from [https://git-scm.com/downloads](https://git-scm.com/downloads)
@@ -37,11 +36,13 @@ IntelliJ can be downloaded from: [https://www.jetbrains.com/idea/download/](http
 
 #### Sources
 
-First get the Kotlin Bootique application source code on your machine by cloning the project from github:
+First get the Kotlin Bootique application source code on your machine by cloning kotlin-bootique-exercises project from github:
 
 ```
-git clone https://github.com/sourcelabs-nl/kotlin-bootique.git
+git clone https://github.com/sourcelabs-nl/kotlin-bootique-exercises.git
 ```
+
+Keep the documentation open in your browser to complete the exercises.
 
 ### Build the application
 
