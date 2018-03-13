@@ -156,4 +156,10 @@ Build the project with maven `./mvnw clean verify`, is it working now?
 
 ### Next steps
 
-Continue with [exercise-2](exercise-2.md):
+Continue with [exercise-2](exercise-2.md), checkout the branch for the next exercise on your local machine:
+
+On your local clone of the kotlin-bootique-exercises project:
+
+```
+git checkout exercise-2
+```
