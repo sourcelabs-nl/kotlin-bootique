@@ -20,15 +20,17 @@ The outcome of the conversion is far from optimal, we can do way better! Remembe
 
 **Exercise**: convert OrderItem to a data class
 
-With data classes we get the equals, hashCode and toString method for free:
+With data classes we get the equals, hashCode and toString method for free.
  
-**Exercise**: delete the equals, hashCode and toString methods.
+**Exercise**: delete the equals, hashCode and toString methods, because the compiler generates them for you now it is a data class.
 
 In the converted code we ended up with a [constructor](https://kotlinlang.org/docs/reference/classes.html#constructors) on class level called the primary constructor, and an overloaded version inside the class called the secondary constructor.
 
 In many situations we can get rid of overloaded constructors by merging the two [constructors](https://kotlinlang.org/docs/reference/classes.html#constructors) into a single primary constructor.
  
-**Exercise**: merge the two constructors but *keep* the @JsonCreator and @JsonProperty annotation. For productId there are two variants, use the non-nullable `val productId: String` which is saver.
+For productId there are two variants after the conversion. One which is the non-nullable `val productId: String` and the other which is nullable `val productId: String?`. Since productId is a mandatory field, use the null safe version in the next exercise.
+ 
+**Exercise**: try to merge the two constructors into one but *keep* all the @JsonCreator and @JsonProperty annotations. 
 
 <details>
   <summary>The resulting code should look like this:</summary>
@@ -44,11 +46,9 @@ data class OrderItem @JsonCreator constructor(@JsonProperty("productId") val pro
 </details>
 <br>
 
-_In case you are wondering where the price value is being provided, then have a look at the `BootiqueController.addToBasket()`_
-
 #### Verify the changes
 
-Build the project with maven (./mvnw clean verify), the build should succeed.
+Build the project with maven `./mvnw clean verify`, the build should succeed.
 
 Start the application (./mvnw spring-boot:run) and see if the application still works. 
 
