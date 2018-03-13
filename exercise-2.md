@@ -30,7 +30,7 @@ In many situations we can get rid of overloaded constructors by merging the two 
  
 For productId there are two variants after the conversion. One which is the non-nullable `val productId: String` and the other which is nullable `val productId: String?`. Since productId is a mandatory field, use the null safe version in the next exercise.
  
-**Exercise**: try to merge the two constructors into one but *keep* all the @JsonCreator and @JsonProperty annotations. 
+**Exercise**: try to merge the two constructors into one but *keep* all the @JsonCreator and @JsonProperty annotations. Hint, the constructor keyword on class level is mandatory when you want to use annotations on the primary constructor.
 
 <details>
   <summary>The resulting code should look like this:</summary>
