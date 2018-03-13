@@ -1,3 +1,5 @@
+# Kotlin Bootique Workshop
+
 ## Introduction
 
 Welcome to the Kotlin workshop. During this workshop you are going to convert an existing Java application to Kotlin.
