@@ -16,7 +16,7 @@ Prepare the maven pom.xml for Kotlin.
 ```xml
 <properties>
     ...
-    <kotlin.version>1.2.0</kotlin.version>
+    <kotlin.version>1.2.30</kotlin.version>
 </properties>
 ```
 </details>
@@ -30,7 +30,7 @@ Prepare the maven pom.xml for Kotlin.
 ```xml
 <dependency>
     <groupId>org.jetbrains.kotlin</groupId>
-    <artifactId>kotlin-stdlib-jre8</artifactId>
+    <artifactId>kotlin-stdlib-jdk8</artifactId>
     <version>${kotlin.version}</version>
 </dependency>
 <dependency>
@@ -95,7 +95,7 @@ Lets convert some Java code to Kotlin, start with the BootiqueApplication.java f
 
 Build the project with maven (./mvnw clean verify).
 
-You should see an error in the tests. The BootiqueApplicationTests try to bootstrap the Spring Boot application but fails with the following error:
+You should see an error in the tests. The BootiqueApplicationTests tries to bootstrap the Spring Boot application but fails with the following error:
 ```
 org.springframework.beans.factory.parsing.BeanDefinitionParsingException: 
 Configuration problem: @Configuration class 'BootiqueApplication' may not be final. 
@@ -115,7 +115,7 @@ open class BootiqueApplication
 ```
 </details>
 <br>
-Build the project with maven (./mvnw clean verify), is it working?
+Build the project with maven <code>./mvnw clean verify</code>, is it working?
 
 ```
 org.springframework.beans.factory.parsing.BeanDefinitionParsingException: 
@@ -150,15 +150,10 @@ Add the following configuration to the kotlin-maven-plugin, just after: `<versio
 </details>
 <br>
 
-Build the project with maven (./mvnw clean verify), is it working now? 
+Build the project with maven `./mvnw clean verify`, is it working now? 
 
 **Exercise**: You can now also remove the _open_ keyword from the BootiqueApplication class definition if it really bothers you.
 
 ### Next steps
 
 Continue with [exercise-2](exercise-2.md):
-
-```
-git checkout exercise-2
-```
-
