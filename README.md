@@ -101,7 +101,7 @@ curl -H "Content-Type: application/json" -X POST -d '{"productId":"2","quantity"
 
 ### Next steps
 
-This workshop consist of several exercises that guide you through the process. Each of the exercises are in an separate git branch. 
+This workshop consist of several exercises that guide you through the process. Each of the exercises are in the kotlin-bootique-exercises on an separate git branch. 
 
 By checking out a new exercise you will start of with a working implementation of the previous exercise.
 
@@ -111,6 +111,8 @@ You can start your journey by switching to the exercise-1 branch either by using
 git checkout exercise-1
 ```
 
-The exercises can be found in the [./docs/exercises/](./docs/exercises/) folder.
+Keep this documentation open in your browser to complete the exercises.
+
+Lets get started with the first exercise: [exercise-1.md](./exercise-1.md)
 
 Enjoy the ride!
