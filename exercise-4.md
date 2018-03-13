@@ -47,3 +47,98 @@ fun beans() = beans {
 </details>
 
 ### Spring Boot 2 and the Kotlin bean definition DSL
+
+We need to configure the SpringApplication runner to start using the BeanDefinitionDsl. Spring Boot 2 provides some Kotlin extensions to do just that:
+
+```kotlin
+fun main(args: Array<String>) {
+    runApplication<BootiqueApplication>(*args) {
+        addInitializers(...add beans defintion dsl here...)
+    }
+}
+```
+
+**Exercise**: Replace the existing main (including companion object) by this Spring Boot extension.
+
+Right now you should have a `BootiqueApplication.kt` file with only a Kotlin class definition and two functions: beans() and main().
+
+<details>
+<summary>The resulting code should look like this:</summary>
+
+```kotlin
+/**
+ * Spring boot application with Swagger2 enabled.
+ */
+@SpringBootApplication
+@EnableSwagger2
+class BootiqueApplication
+
+/**
+ * Swagger2 configuration.
+ */
+fun beans() = beans {
+    bean<Docket> {
+        Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.any())
+                .build()
+    }
+}
+
+/**
+ * Runs the Spring boot application.
+ */
+fun main(args: Array<String>) {
+    runApplication<BootiqueApplication>(*args) {
+        addInitializers(beans())
+    }
+}
+```
+</details>
+<br>
+
+We could simplify this code even further by in-lining the beans() function inside runApplication.
+
+**Exercise**: move  `beans { ... }` inside of the `runApplication { ... }` block
+
+<details>
+<summary>The resulting code should look like this:</summary>
+
+```kotlin
+/**
+ * Spring boot application with Swagger2 enabled.
+ */
+@SpringBootApplication
+@EnableSwagger2
+class BootiqueApplication
+
+/**
+ * Runs the Spring boot application.
+ */
+fun main(args: Array<String>) {
+    runApplication<BootiqueApplication>(*args) {
+        beans {
+            bean<Docket> {
+                Docket(DocumentationType.SWAGGER_2)
+                        .select()
+                        .apis(RequestHandlerSelectors.any())
+                        .paths(PathSelectors.any())
+                        .build()
+            }
+        }
+    }
+}
+```
+</details>
+<br>
+
+### Next steps
+
+Your are almost there!
+ 
+Continue with [exercise-5](exercise-5.md):
+
+```
+git checkout exercise-5
+```
