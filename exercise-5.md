@@ -104,7 +104,17 @@ public void testRetrieveBasket() {
 }
 ```
 
-Now create the Kotlin equivalent.
+Now create the Kotlin equivalent. See the imports that go with the snippet above listed here.
+
+```
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import org.mockito.Mockito.*
+import org.mockito.junit.MockitoJUnitRunner
+```
 
 <details>
 <summary>Suggested solution</summary>
