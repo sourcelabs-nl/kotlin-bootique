@@ -237,7 +237,7 @@ The `/products` endpoint returns a list of products. In order to employ automati
 testRestTemplate.exchange("/products", HttpMethod.GET, null, object: ParameterizedTypeReference<List<Product>>() {})
 ```
 
-Create the test method and add the call listed above to it. Also add an assert to verify that the result of the call is a collection containing 4 items (the default product set). 
+Create the test method and add the call listed above to it. Also add an assert to check if the first item in the list has a title with value "iPhone X".
 
 <details>
 <summary>Suggested solution</summary>
@@ -247,16 +247,24 @@ The resulting test would look something like this:
 ```kotlin
 @Test
 fun `test bootique get products endpoint`() {
-    val products = restTemplate.exchange("/products", HttpMethod.GET, null, object : ParameterizedTypeReference<List<Product>>() {}).body
-    assertEquals(4, products.size)
+    val products = testRestTemplate.exchange("/products", HttpMethod.GET, null, object: ParameterizedTypeReference<List<Product>>() {}).body
+    assertEquals("iPhone X", products[0].title)
 }
 ```
 
+The products val will be of type `List<Product>` thanks to the usage of the `ParametrizedTypeReference` which helps Spring work out the collection generic type for calls returning collections. This way the `exchange` method will return a `ResponseBody<List<Product>>`. It is a bit verbose though, and requires the use of an anonymous inner class, which in Kotlin is defined using `object: ParameterizedTypeReference<List<Product>>() {}`. This class does not define any abstract method so we can just provide an empty body, but we would have to provide it in every test method.
+
 </details>
 
-Run the test. Hey! What gives?
 
-The test will fail, what's going on? You will notice that the stacktrace is hinting at the fact that Spring cannot unmarshal the json to objects. This is because data classes are different to 'normal' Java classes, so Jackson requires some assistance in marshalling and unmarshalling these types. Luckily, there's a Kotlin module for Jackson that will help out with this, so modify your pom.xml and add the following:
+Run the test. Hey! What gives? There's a failing test and a stacktrace. The stracktrace contains the following information:
+
+```
+org.springframework.http.converter.HttpMessageConversionException: Type definition error: [simple type, class com.bootique.bootique.Product]; nested exception is com.fasterxml.jackson.databind.exc.InvalidDefinitionException: Cannot construct instance of `com.bootique.bootique.Product` (no Creators, like default construct, exist): cannot deserialize from Object value (no delegate- or property-based Creator)
+ at [Source: (PushbackInputStream); line: 1, column: 3] (through reference chain: java.util.ArrayList[0])
+```
+
+Looks like a message conversion error, Spring and Jackson are having trouble converting the JSON coming from the endpoint back to `List<Product>` instances. This is because data classes are different to 'normal' Java classes, so Jackson requires some assistance in marshalling and unmarshalling these types. Luckily, there's a Kotlin module for Jackson that will help out with this, so modify your pom.xml and add the following:
 
 ```xml
 <dependency>
@@ -266,37 +274,29 @@ The test will fail, what's going on? You will notice that the stacktrace is hint
 </dependency>
 ```
 
-The appropriate module will be added based on the already provided Jackson version in the project coming from Spring (`${jackson.version}`). Spring will auto-load any available Jackson extensions on the classpath in its current configuration, so you just have to provide it.
+The appropriate module will be added based on the already provided Jackson version in the project coming from Spring (`${jackson.version}`). Spring will auto-load any available Jackson extensions on the classpath in its current configuration, so you just have to provide this dependency in the `pom.xml`.
 
-This will return a `ResponseEntity<List<Product>>` because the type is enforced thanks to the ParametrizedTypeReference. It is a bit verbose though, and requires the use of an anonymous inner class.
+Run the test again, it should now run properly and succeed (provided you built it right) :)
 
-As a final exercise, let's leverage three interesting features Kotlin has to offer: Extension functions and inlining + reified generics.
+**Exercise** Optimizing the test
 
-What if we could define an (extension) function to call an endpoint like this:
+As a final exercise, let's leverage three interesting features Kotlin has to offer: Extension functions and inlining + reified generics to shorten the resttemplate call.
+
+What if we could define an (extension) function named `get` -- which uses reified generics -- to call the endpoint like this:
 
 ```kotlin
 val products = testRestTemplate.get<List<Product>>("/products")
 ```
 
-Extension functions allow us to 'add' functionality to an already existing class. This is no
-bytecode magic, but merely some syntactic sugar that creates a function that takes the instance
-it is called on as an implicit parameter and exposes it as `this`.
+Extension functions allow us to 'add' functionality to an already existing class. This is no bytecode magic, but merely some syntactic sugar that creates a function that takes the instance it is called on as an implicit parameter and exposes it as `this`.
 
-Secondly, we can employ generics, more specifically reified generics, to extract the type from
-a generic parameter **at runtime**. Kotlin can inline function code at the call site, eliminating
-the need for dynamic calls but also adding some extra flexibility: by inlining the code at the
-call site, Kotlin is able to escape from the type erasure that haunts the JVM.
+Secondly, we can employ generics, more specifically reified generics, to extract the type from a generic parameter **at runtime**. Kotlin can inline function code at the call site, eliminating the need for dynamic calls but also adding some extra flexibility: by inlining the code at the call site, Kotlin is able to escape from the type erasure that haunts the JVM.
 
-Try to implement an extension function for `TestRestTemplate`, named `get(uri: String)` which
-delegates to the `exchange()` method.
+Try to implement an extension function for `TestRestTemplate`, named `get(uri: String)` which delegates to the `exchange()` method.
 
-For reference, the syntax below shows an extension function on the `TestRestTemplate` type, 
-in this case with a void return type. It also defines generics. Modify this call so you can 
-call it like listed below.
+For reference, the syntax below shows an extension function on the `TestRestTemplate` type, in this case with a void return type. It also defines generics. Modify this call so you can call it like so: `val products = testRestTemplate.get<List<Product>>("/products"`.
 
 ```kotlin
-val products = testRestTemplate.get<List<Product>>("/products") // Usage
-
 fun <T> TestRestTemplate.get(url: String): T {
     return ...
 }
@@ -316,13 +316,54 @@ Having done this, we can now refer to the generic type as usual, but we can also
 type at runtime, which means we can actually use `T::class.java` to get the runtime type of 
 the class!
 
-Putting it all together, we can now conveniently call get with just the url path, and the specified generic type, like this: `restTemplate.get<List<Product>>("/products")`. We can use the generics to apply to the `ParametrizedTypeReference<T>`. We can create an anonymous inner class for this, for which Kotlin uses this notation: `object: ParameterizedTypeReference<T>() {}`. 
+Putting it all together, we can now conveniently call `get` with just the url path, and the specified generic type, like this: `testRestTemplate.get<List<Product>>("/products")`. We can use the generics to apply to the `ParametrizedTypeReference<T>`. 
 
 ```kotlin
 inline fun <reified T> TestRestTemplate.get(url: String): T = this.exchange(
         url, HttpMethod.GET, null, object: ParameterizedTypeReference<T>() {}
 ).body
 ```
+
+Run the test again, it should succeed! We now have a more compact way to call our endpoints.
+
+But why the reified generics? The code compiled fine with and without the `inline` and `reified` keywords, so what is the difference? 
+
+To see why, you can use the debugger. Debug the test with the function listed above and check what type is coming from the `RestTemplate.get` call. Looking at the code, this should be `List<Product>`, and at runtime this seems to be the case, as Intellij clearly lists that products is an `ArrayList` with 4 `Product` instances, just like we expected:
+
+```
+products = {java.util.ArrayList@7918}  size = 4
+ 0 = {com.bootique.bootique.Product@7920} "Product(id=1, title=iPhone X, brand=Apple, listPrice=989.99)"
+ 1 = {com.bootique.bootique.Product@7921} "Product(id=2, title=Galaxy S8, brand=Samsung, listPrice=699.99)"
+ 2 = {com.bootique.bootique.Product@7922} "Product(id=3, title=3310, brand=Nokia, listPrice=19.95)"
+ 3 = {com.bootique.bootique.Product@7923} "Product(id=4, title=Kermit, brand=KPN, listPrice=6.95)"
+```
+
+Now, define the extension function *without* the reified generics (remove the inline and reified keywords):
+
+```kotlin
+fun <T> TestRestTemplate.get(url: String): T = this.exchange(
+        url, HttpMethod.GET, null, object: ParameterizedTypeReference<T>() {}
+).body
+```
+
+Debug the test again, and look at the change -- even though the code suggests we are dealing with `List<Product>` the type erasure causes Spring to only be aware of the `List` part. So, we still get a `List` but it is populated with a `LinkedHashMap`, containing all the individual values for the `Product` instance. Not quite the same!
+
+```
+products = {java.util.ArrayList@7907}  size = 4
+ 0 = {java.util.LinkedHashMap@7909}  size = 4
+  0 = {java.util.LinkedHashMap$Entry@7915} "id" -> "1"
+  1 = {java.util.LinkedHashMap$Entry@7916} "title" -> "iPhone X"
+  2 = {java.util.LinkedHashMap$Entry@7917} "brand" -> "Apple"
+  3 = {java.util.LinkedHashMap$Entry@7918} "listPrice" -> "989.99"
+ 1 = {java.util.LinkedHashMap@7910}  size = 4
+ 2 = {java.util.LinkedHashMap@7911}  size = 4
+ 3 = {java.util.LinkedHashMap@7912}  size = 4
+```
+
+You'll also get an error when the test reaches the assertion: `java.lang.ClassCastException: java.util.LinkedHashMap cannot be cast to com.bootique.bootique.Product` - it will break!
+
+This should show you the power of reified generics. We can now define extension functions that employ generics and still have enough type information available at runtime for the functions to be useful.
+
 </details> 
 
 If you were able to succesfully make the changes to the method as listed above, you can then implement the full test like listed below. The (inferred) type for `val products` is `List<Product>`. We should get a result of four products (which is the default number of products when starting the service). Let's do a quick assert that this expectation matches.
