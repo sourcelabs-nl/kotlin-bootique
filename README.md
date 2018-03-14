@@ -49,7 +49,7 @@ IntelliJ Ultimate Edition is preferred but IntelliJ Community will also work. In
 
 #### Sources
 
-The Kotlin Bootique exercisescan be found in a separate git repository. Please clone the source to your local machine from github:
+The Kotlin Bootique exercises can be found in a separate git repository. Please clone the source to your local machine from github:
 
 ```
 git clone https://github.com/sourcelabs-nl/kotlin-bootique-exercises.git
