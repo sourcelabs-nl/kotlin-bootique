@@ -123,9 +123,9 @@ Lets do this step by step!
 val totalPrice: BigDecimal = price * BigDecimal(quantity)
 ```
 
-This is not yet how we want to write the expression because we still have to wrap the quantity in a BigDecimal in order to be able to do calculations with BigDecimals. Notice that in Java this would not have been possible!
+This is not yet how we want to write the expression because we still have to wrap the quantity in a BigDecimal in order to be able to do calculations with BigDecimals. Notice that in Java this way of doing calculations on BigDecimals would not be possible!
 
-The Kotlin stdlib includes [overloaded operators](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/java.math.-big-decimal/index.html) for Java types like java.math.BigDecimal, this allows use the * operator on BigDecimal. 
+The Kotlin stdlib includes [overloaded operators](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/java.math.-big-decimal/index.html) for Java types like java.math.BigDecimal, this allows use the * (times) operator on BigDecimal. 
 
 Have a look at the signature for times operator on java.math.BigDecimal. 
 
@@ -135,7 +135,7 @@ public operator inline fun java.math.BigDecimal.times(other: java.math.BigDecima
 
 Note that `price * BigDecimal(quantity)` under the hood is exactly the same as `price.times(BigDecimal(quantity))`, this is just syntactic sugar. 
 
-What we want is being able to invoke the times function with a Int argument so that we do not need to wrap our Int in a BigDecimal. We can implement our own overloaded operator, similar to the one in the Koltin stdlib. 
+What we want is being able to invoke the times function with a Int argument so that we do not need to wrap our Int in a BigDecimal. We can implement our own overloaded operator, similar to the one in the Kotlin stdlib. 
 
 **Exercise**: write an operator for java.math.BigDecimal that accepts an Int.
 
