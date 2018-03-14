@@ -119,7 +119,7 @@ import org.mockito.junit.MockitoJUnitRunner
 <details>
 <summary>Suggested solution</summary>
 
-The code is not that different from the Java, but there's catch! In Kotlin `when` is a keyword!
+The code is not that different from the Java, but there's catch! In Kotlin [`when`](https://kotlinlang.org/docs/reference/grammar.html#when) is a keyword!
 Luckily, this was anticipated so in Kotlin we can still use function calls with backticks 
 around them. Besides this, it's all the same.
 
@@ -186,7 +186,7 @@ This application stems from [start.spring.io](http://start.spring.io) and becaus
 
 The first step would be to convert the test to Kotlin code, so do so now.
 
-**Exercise**: Modify the test setup for calling an endpoint in the running bootique service
+**Exercise**: Set up the Spring [WebEnvironment](https://spring.io/guides/gs/testing-web/) for application testing
 
 We are going to test the app by calling an endpoint, so we'll be modifying the test. We are first going to tell Spring Boot to start a server (on a random port) and will wire in a TestRestTemplate to call the service.
 
