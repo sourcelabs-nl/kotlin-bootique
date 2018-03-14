@@ -92,7 +92,7 @@ Remove the final modifier to continue.
 Offending resource: com.bootique.bootique.BootiqueApplication
 ```
 
-What happened? In Kotlin all the classes are final by default, unless specified otherwise using the open keyword. This causes an issue with frameworks like Spring (Boot) that need to be able to subclass (Proxy) you configuration classes and components. Since final classes can't be subclassed your code is now broken. We can mark a class open so it can be inherited by other classes. 
+What happened? In Kotlin all the classes are final by default, unless specified otherwise using the open keyword. This causes an issue with frameworks like Spring (Boot) that need to be able to subclass (Proxy) your configuration classes and components. Since final classes can't be subclassed your code is now broken. We can mark a class open so it can be extended by other classes. 
 
 **Exercise**: Add the open keyword to the BootiqueApplication class definition.
 
