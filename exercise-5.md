@@ -222,18 +222,48 @@ Run the setup, the context should load, injection of the `TestRestTemplate` shou
 
 **Exercise**: Add the actual test
 
-Let's define the test. Implement the body of this function, by using the `TestRestTemplate` to call the service.
+Let's define the test. Implement the body of this function, by using the `TestRestTemplate` to call the service. As we saw with the `when` function a while ago, using backticks allows you to specify method names that may clash with Kotlin keywords. You can also include whitespace in the name of the method -- meaning you can have expressive test names, which can be very helpful when testing.
 
 ```kotlin
 @Test
 fun `test bootique get products endpoint`() {}
 ```
 
-The `/products` endpoint returns a list of products. In order to employ automatic conversion to List<Product> we can use a class called `ParameterizedTypeReference` which will allowed a typed return value for the template. Consider the following call:
+The `/products` endpoint returns a list of products. In order to employ automatic conversion to List<Product> we can use a class called `ParameterizedTypeReference` which will use a typed return value for the template. Consider the following call which (thanks to the `ParameterizedTypeReference` will return a `List<Product>`:
 
 ```kotlin
 testRestTemplate.exchange("/products", HttpMethod.GET, null, object: ParameterizedTypeReference<List<Product>>() {})
 ```
+
+Create the test method and add the call listed above to it. Also add an assert to verify that the result of the call is a collection containing 4 items (the default product set). 
+
+<details>
+<summary>Suggested solution</summary>
+
+The resulting test would look something like this:
+
+```
+@Test
+fun `test bootique get products endpoint`() {
+    val products = restTemplate.exchange("/products", HttpMethod.GET, null, object : ParameterizedTypeReference<List<Product>>() {}).body
+    assertEquals(4, products.size)
+}
+```  
+</details>
+
+Run the test. Hey! What gives?
+
+The test will fail, what's going on? You will notice that the stacktrace is hinting at the fact that Spring cannot unmarshal the json to objects. This is because data classes are different to 'normal' Java classes, so Jackson requires some assistance in marshalling and unmarshalling these types. Luckily, there's a Kotlin module for Jackson that will help out with this, so modify your pom.xml and add the following:
+
+```xml
+<dependency>
+    <groupId>com.fasterxml.jackson.module</groupId>
+    <artifactId>jackson-module-kotlin</artifactId>
+    <version>${jackson.version}</version>
+</dependency>
+```
+
+The appropriate module will be added based on the already provided Jackson version in the project coming from Spring (`${jackson.version}`). Spring will auto-load any available Jackson extensions on the classpath in its current configuration, so you just have to provide it.
 
 This will return a `ResponseEntity<List<Product>>` because the type is enforced thanks to the ParametrizedTypeReference. It is a bit verbose though, and requires the use of an anonymous inner class.
 
@@ -302,18 +332,6 @@ fun `test bootique get products endpoint`() {
     assertThat(products[0].title).isEqualTo("iPhone X")
 }
 ```
-
-The test will fail, what's going on? You will notice that the stacktrace is hinting at the fact that Spring cannot unmarshal the json to objects. This is because data classes are different to 'normal' Java classes, so Jackson requires some assistance in marshalling and unmarshalling these types. Luckily, there's a Kotlin module for Jackson that will help out with this, so modify your pom.xml and add the following:
-
-```xml
-<dependency>
-    <groupId>com.fasterxml.jackson.module</groupId>
-    <artifactId>jackson-module-kotlin</artifactId>
-    <version>${jackson.version}</version>
-</dependency>
-```
-
-The appropriate module will be added based on the already provided Jackson version in the project coming from Spring (`${jackson.version}`). Spring will auto-load any available Jackson extensions on the classpath in its current configuration, so you just have to provide it.
 
 Running the test again after adding the libary should allow it to succeed. This should give you some insight in how Kotlin integrates well with the existing test setup you may already have, how to deal with reserved names and how to write and extension function with reified generics to allow convenient and expressive usage of an injected rest template.
 
