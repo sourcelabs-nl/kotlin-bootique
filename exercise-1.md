@@ -76,6 +76,8 @@ Your project is now ready for the compilation of Kotlin files! Since we did not 
 
 **Exercise**: Build the project using maven by executing the following maven command `./mvnw clean verify`
 
+The build should be successful!
+
 ### Converting Java to Kotlin
 
 Let's convert some Java code to Kotlin, we can start with the BootiqueApplication.java file. You can try to do this manually but this can easily be done using IntelliJ via the menu option: _Code > Convert Java File to Kotlin File_
@@ -144,7 +146,7 @@ Add the following configuration to the kotlin-maven-plugin, just after: `<versio
 
 **Exercise**: Build the project using maven by executing the following maven command `./mvnw clean verify`
 
-The build shoud now be successful!
+The build should be successful!
 
 ### Next steps
 
