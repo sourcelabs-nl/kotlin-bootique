@@ -2,19 +2,21 @@
 
 ### Introduction
 
-Welcome to the Kotlin workshop. During this workshop you are going to convert an existing Java application to Kotlin.
+Welcome to the Kotlin Bootique Workshop. The Kotlin Bootique application provides a very minimalistic implementation of a RESTful API for building a Webshop. The application consists of the following endpoints:
 
-The Kotlin Bootique application is currently written in Java. It provides a very minimalistic implementation of an API for a Webshop. Consisting of the following functionality provided by RESTful endpoints:
+| Uri                   | HttpMethod    | Description                                       |
+| --------------------- | :-----------: | ------------------------------------------------- |
+| _/products_           | GET           | retrieve product and price information            |
+| _/baskets/{id}_       | GET           | retrieve a shopping basket                        |
+| _/baskets/{id}/items_ | POST          | adding an item to a basket                        |
 
-- _/products_: retrieving product and price information
-- _/baskets/{id}_: retrieving an overview of a shopping basket
-- _/baskets/{id}/items_: being able to add item to your basket
+Throughout this workshop you are going to convert this Spring Boot based application written in Java to the Kotlin equivalent. You will be guided through some of the challenges developers are facing while migrating existing applications to Kotlin.
 
-Step-by-step you are going to convert the code to Kotlin. If you are able to successfully complete this workshop, you should have enough knowledge to start using Kotlin in any of your (existing) Java projects.
+If you are able to successfully complete this workshop, you should have enough knowledge to start using Kotlin in any of your (existing) Java projects.
 
 ### Prerequisites
 
-This tutorial assumes that you have some basic knowledge about Java 8, Maven, Git and Spring Boot (Web).
+This tutorial assumes that you at least have some basic knowledge about Java 8, Maven, Git and Spring Boot.
 
 #### Git
 
@@ -103,18 +105,18 @@ curl -H "Content-Type: application/json" -X POST -d '{"productId":"2","quantity"
 
 ### Next steps
 
-This workshop consist of several exercises that guide you through the process. Each of the exercises are in the kotlin-bootique-exercises on an separate git branch. 
+This workshop consist of several exercises that guide you through the process. Each of the exercises are in the kotlin-bootique-exercises project on an separate git branch. 
 
-By checking out a new exercise you will start of with a working implementation of the previous exercise.
+By checking out each new exercise you will start of with a working implementation of the previous exercise.
 
-You can start your journey by switching to the exercise-1 branch either by using IntelliJ or issue the following command in your terminal:
+You can start your journey now by switching to the exercise-1 branch either by using IntelliJ or issue the following command in your terminal:
 
 ```
 git checkout exercise-1
 ```
 
-Keep this documentation open in your browser to complete the exercises.
+Please keep this documentation open in your browser while completing the exercises.
 
-Lets get started with the first exercise: [exercise-1.md](./exercise-1.md)
+The documentation for the first exercise: [exercise-1.md](./exercise-1.md)
 
 Enjoy the ride!
