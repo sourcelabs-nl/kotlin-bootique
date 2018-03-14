@@ -1,24 +1,24 @@
 ## Exercise 2: convert more code to Kotlin
 
-In this exercise we will convert the Product.java and OrderItem.java classes to Kotlin, our goal is to make it more concise.
+In this exercise we will convert the `Product.java` and `OrderItem.java` classes to Kotlin, our goal is to make it more concise.
 
 ### Convert Product.java to Kotlin
 
-Open Product.java.
+Open `Product.java`.
 
-**Exercise**: convert Product.java to Kotlin using IntelliJ (menu > Code > Convert Java File to Kotlin File). 
+**Exercise**: convert Product.java to Kotlin using IntelliJ _menu > Code > Convert Java File to Kotlin File_. 
 
 Wow, that was easy. The resulting file is what we call concise :-)
 
 ### Convert OrderItem.java to Kotlin
 
-Open OrderItem.java. 
+Open `OrderItem.java`. 
 
-**Exercise**: convert OrderItem.java to Kotlin using IntelliJ (menu > Code > Convert Java File to Kotlin File). 
+**Exercise**: convert OrderItem.java to Kotlin using IntelliJ _menu > Code > Convert Java File to Kotlin File_. 
 
 The outcome of the conversion is far from optimal, because of the Java class being a bit more complex. We can do better! 
 
-Let get rid of the equals(), hashCode() and toString() boiler-plate. Kotlin has a feature for that: [data classes](https://kotlinlang.org/docs/reference/data-classes.html). Lets do this step by step.
+Let get rid of the `equals()`, `hashCode()` and `toString()` boiler-plate. Kotlin has a feature for that: [data classes](https://kotlinlang.org/docs/reference/data-classes.html). Lets do this step by step.
 
 **Exercise**: convert OrderItem to a data class by adding the `data` keyword
 
@@ -32,7 +32,7 @@ In many situations we can get rid of the duplicate constructors by merging the [
  
 Notice that the `productId` argument in the two constructors are different, one which is the non-nullable `val productId: String` and the other which is nullable `val productId: String?`. Since productId should be a mandatory field, we will use the null safe version in the next exercise.
  
-**Exercise**: merge the two constructors into primary constructor but *don't remove* the @JsonCreator and @JsonProperty annotations. Hint, the constructor keyword on class level is mandatory when you want to use annotations on the primary constructor.
+**Exercise**: merge the two constructors into primary constructor but *don't remove* the `@JsonCreator` and `@JsonProperty` annotations. Hint, the constructor keyword on class level is mandatory when you want to use annotations on the primary constructor.
 
 <details>
   <summary>Suggested solution:</summary>
@@ -123,11 +123,11 @@ Lets do this step by step!
 val totalPrice: BigDecimal = price * BigDecimal(quantity)
 ```
 
-This is not yet how we want to write the expression because we still have to wrap the quantity in a BigDecimal in order to be able to do calculations with BigDecimals. Notice that in Java this way of doing calculations on BigDecimals would not be possible!
+This is not yet how we want to write the expression because we still have to wrap the quantity in a BigDecimal in order to be able to do calculations with BigDecimal. Notice that in Java this way of doing calculations on BigDecimals would not be possible!
 
 The Kotlin stdlib includes [overloaded operators](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/java.math.-big-decimal/index.html) for Java types like java.math.BigDecimal, this allows use the * (times) operator on BigDecimal. 
 
-Have a look at the signature for times operator on java.math.BigDecimal. 
+Have a look at the signature for times operator on `java.math.BigDecimal`. 
 
 ```kotlin
 public operator inline fun java.math.BigDecimal.times(other: java.math.BigDecimal): java.math.BigDecimal
@@ -154,11 +154,11 @@ You can group these custom extensions like overloaded operators in a Kotlin file
 
 This application communicates over HTTP using JSON, as you have seen in Swagger or in the curl command in the README.md. The JSON (de)serialization in this application is handled by the Jackson library, the spring-boot-starter-web (Spring Boot 2!) dependency pulls in the Jackson dependencies for us.
 
-In the BasketController the JSON data is mapped from the POST data directly on the OrderItem class. As you can see, in the OrderItem class we are instructing the Jackson library, with the @JsonCreator and @JsonProperty, how to map the JSON data to our Java (or Kotlin) class. 
+In the BasketController the JSON data is mapped from the POST data directly on the OrderItem class. As you can see, in the OrderItem class we are instructing the Jackson library, with the `@JsonCreator` and `@JsonProperty`, how to map the JSON data to our Java (or Kotlin) class. 
 
-Reason for having the @JsonProperty annotation is that when compiling Java code, the parameter names of the constructor parameters are lost, so Jackson does not know how to map the json properties to the OrderItem class. In Kotlin, constructor parameter names are preserved when compiling code. We can therefore get rid of the @JsonProperty annotations. 
+Reason for having the `@JsonProperty` annotation is that when compiling Java code, the parameter names of the constructor parameters are lost, so Jackson does not know how to map the json properties to the OrderItem class. In Kotlin, constructor parameter names are preserved when compiling code. We can therefore get rid of the  `@JsonProperty` annotations. 
 
-As a bonus feature, the Jackson library also allows us to omit the @JsonCreator annotation when using Kotlin (these features are provided by the jackson kotlin module). This needs to explicitly be added to the project dependencies!
+As a bonus feature, the Jackson library also allows us to omit the `@JsonCreator` annotation when using Kotlin, these features are provided by the `jackson-kotlin-module`. This dependency needs to be explicitly added to the project pom.xml!
 
 When we don't have any annotations on the class definition we can omit the constructor keyword as well.
 
