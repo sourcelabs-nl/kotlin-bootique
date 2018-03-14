@@ -140,6 +140,7 @@ fun `test retrieving basket functionality`() {
     verify(mockBasketRepository).getBasketById(basketId)
 }
 ```
+
 </details>
 <br>
 
@@ -243,7 +244,7 @@ Create the test method and add the call listed above to it. Also add an assert t
 
 The resulting test would look something like this:
 
-```
+```kotlin
 @Test
 fun `test bootique get products endpoint`() {
     val products = restTemplate.exchange("/products", HttpMethod.GET, null, object : ParameterizedTypeReference<List<Product>>() {}).body
