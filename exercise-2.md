@@ -158,7 +158,7 @@ In the BasketController the JSON data is mapped from the POST data directly on t
 
 Reason for having the @JsonProperty annotation is that when compiling Java code, the parameter names of the constructor parameters are lost, so Jackson does not know how to map the json properties to the OrderItem class. In Kotlin, constructor parameter names are preserved when compiling code. We can therefore get rid of the @JsonProperty annotations. 
 
-As a bonus feature, the Jackson library also allows us to omit the @JsonCreator annotation when using Kotlin (these features are provided by the jackson kotlin module).
+As a bonus feature, the Jackson library also allows us to omit the @JsonCreator annotation when using Kotlin (these features are provided by the jackson kotlin module). This needs to explicitly be added to the project dependencies!
 
 When we don't have any annotations on the class definition we can omit the constructor keyword as well.
 
