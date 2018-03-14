@@ -10,7 +10,7 @@ Welcome to the Kotlin Bootique Workshop. The Kotlin Bootique application provide
 | _/baskets/{id}_       | GET           | retrieve a shopping basket                        |
 | _/baskets/{id}/items_ | POST          | adding an item to a basket                        |
 
-Throughout this workshop you are going to convert this Spring Boot based application written in Java to the Kotlin equivalent. You will be guided through some of the challenges developers are facing while migrating existing applications to Kotlin.
+Throughout this workshop you are going to convert this Spring Boot based application written in Java to the Kotlin equivalent. You will be guided through some of the challenges you as a developer will be facing while migrating existing applications to Kotlin.
 
 If you are able to successfully complete this workshop, you should have enough knowledge to start using Kotlin in any of your (existing) Java projects.
 
