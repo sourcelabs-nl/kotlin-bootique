@@ -355,7 +355,7 @@ inline fun <reified T> TestRestTemplate.postJson(url: String, json: String): Res
 }
 ```
 
-** Important ** 
+**Important** 
 
 In the example we used
 
