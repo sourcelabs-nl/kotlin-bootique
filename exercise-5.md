@@ -291,7 +291,19 @@ fun `test bootique get products endpoint`() {
 }
 ```
 
-Running it should succeed. This should give you some insight in how Kotlin integrates well with the existing test setup you may already have, how to deal with reserved names and how to write and extension function with reified generics to allow convenient and expressive usage of an injected rest template.
+The test will fail, what's going on? You will notice that the stacktrace is hinting at the fact that Spring cannot unmarshal the json to objects. This is because data classes are different to 'normal' Java classes, so Jackson requires some assistance in marshalling and unmarshalling these types. Luckily, there's a Kotlin module for Jackson that will help out with this, so modify your pom.xml and add the following:
+
+```xml
+<dependency>
+    <groupId>com.fasterxml.jackson.module</groupId>
+    <artifactId>jackson-module-kotlin</artifactId>
+    <version>${jackson.version}</version>
+</dependency>
+```
+
+The appropriate module will be added based on the already provided Jackson version in the project coming from Spring (`${jackson.version}`). Spring will auto-load any available Jackson extensions on the classpath in its current configuration, so you just have to provide it.
+
+Running the test again after adding the libary should allow it to succeed. This should give you some insight in how Kotlin integrates well with the existing test setup you may already have, how to deal with reserved names and how to write and extension function with reified generics to allow convenient and expressive usage of an injected rest template.
 
 But, if we do not use reified generics and inline the function as we did before, we will lose all type information at runtime! Removing `inline` and `reified` will change the response. Instead of a `List<Product>`, the return type will be a `List<java.util.LinkedHashMap>`. Run the test again, and see that it fails on the assert for `products[0].title`; `LinkedHashMap` does not define a property called `title`. All in all, quite a useful feature, retaining this type information at runtime, which can come in handy when trying to work around the type erasure that haunts Java.
 
