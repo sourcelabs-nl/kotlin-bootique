@@ -231,6 +231,10 @@ You have now successfully converted all of the Java code to Kotlin!
 
 Continue with [exercise-4](exercise-4.md):
 
+You can either start fresh by switching to the exercise-4 branch or continue on your current branch.
+
+Switching to the exercise-4 branch can be done using IntelliJ or in your terminal by issuing the following command:
+
 ```
 git checkout exercise-4
 ```
