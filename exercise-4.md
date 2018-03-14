@@ -53,7 +53,7 @@ companion object {
     @JvmStatic
     fun main(args: Array<String>) {
         runApplication<BootiqueApplication>(*args) {
-            addInitializers(...add beans defintion dsl here...)
+            addInitializers(...add bean defintion dsl here...)
         }
     }
 }
@@ -91,7 +91,6 @@ class BootiqueApplication {
         /**
          * Runs the Spring boot application.
          */
-        @JvmStatic
         fun main(args: Array<String>) {
             runApplication<BootiqueApplication>(*args) {
                 addInitializers(beans())
