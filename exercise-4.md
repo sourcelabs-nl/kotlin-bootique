@@ -4,7 +4,7 @@ In this exercise we will show a real world example of using a DSL written in Kot
 
 ### Configuring the beans
 
-Spring 5 provides a [Kotlin Beans definition DSL](https://docs.spring.io/spring/docs/current/spring-framework-reference/languages.html#kotlin-bean-definition-dsl) to define your application configuration in a different way.
+Spring 5 provides a [Kotlin Bean definition DSL](https://docs.spring.io/spring/docs/current/spring-framework-reference/languages.html#kotlin-bean-definition-dsl) to define your application configuration in a different way.
 
 We will add this to our existing Spring Boot application. In this exercise the goal is to make the SpringBootApplication class more concise. Later you can decide whether you like it or not :-)
 
