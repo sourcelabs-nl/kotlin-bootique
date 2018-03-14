@@ -162,8 +162,7 @@ whenever(mockBasketRepository.getBasketById(basketId)).thenReturn(basket)
 ```
 </details>
 
-You can also add a nifty library to your codebase named [Mockito-Kotlin-Library](https://github.com/nhaarman/mockito-kotlin) which enables you to use mockito `when()` as `whenever()` but also has some good functions added to make
-testing Kotlin with Mockito a breeze. It just adds some simple syntactic sugar to Mockito anywhere it makes sense to do so.
+**Tip** You can also add a useful library to your codebase named [Mockito-Kotlin-Library](https://github.com/nhaarman/mockito-kotlin) which enables you to use mockito `when()` as `whenever()` but also has some good functions added to make testing Kotlin with Mockito a breeze. It just adds some simple syntactic sugar to Mockito anywhere it makes sense to do so to improve the way Mockito and Kotlin integrate.
 
 ### Write an application test
 
