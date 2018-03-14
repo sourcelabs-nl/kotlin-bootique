@@ -6,7 +6,7 @@ Open Basket.java
 
 **Exercise**: convert Basket.java to Kotlin using IntelliJ (menu > Code > Convert Java File to Kotlin File). 
 
-After the conversion the code is broken, just take a look at the totalPrice calculation. Apparently IntelliJ is not able of figuring out all the Java Stream API operations and tries to make the best out of it. 
+After the conversion the code is broken, just take a look at the totalPrice calculation. Apparently IntelliJ is not able to figure out all the Java Stream API operations and tries to make the best out of it. 
 
 We can fix this by writing the calculation in exactly the same way as we would do with the Java Stream API:
 
