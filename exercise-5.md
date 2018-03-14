@@ -270,9 +270,9 @@ What if we could define an (extension) function named `get` -- which uses reifie
 val products = testRestTemplate.get<List<Product>>("/products")
 ```
 
-Extension functions allow us to 'add' functionality to an already existing class. This is no bytecode magic, but merely some syntactic sugar that creates a function that takes the instance it is called on as an implicit parameter and exposes it as `this`.
+[Extension functions](https://kotlinlang.org/docs/reference/extensions.html) allow us to 'add' functionality to an already existing class. This is no bytecode magic, but merely some syntactic sugar that creates a function that takes the instance it is called on as an implicit parameter and exposes it as `this`.
 
-Secondly, we can employ generics, more specifically reified generics, to extract the type from a generic parameter **at runtime**. Kotlin can inline function code at the call site, eliminating the need for dynamic calls but also adding some extra flexibility: by inlining the code at the call site, Kotlin is able to escape from the type erasure that haunts the JVM.
+Secondly, we can employ generics, more specifically [Reified generics](https://kotlinlang.org/docs/reference/inline-functions.html), to extract the type from a generic parameter **at runtime**. Kotlin can inline function code at the call site, eliminating the need for dynamic calls but also adding some extra flexibility: by inlining the code at the call site, Kotlin is able to escape from the type erasure that haunts the JVM.
 
 Try to implement an extension function for `TestRestTemplate`, named `get(uri: String)` which delegates to the `exchange()` method.
 
