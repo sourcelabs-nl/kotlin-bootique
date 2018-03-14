@@ -248,7 +248,7 @@ The resulting test would look something like this:
 @Test
 fun `test bootique get products endpoint`() {
     val products = testRestTemplate.exchange("/products", HttpMethod.GET, null, object: ParameterizedTypeReference<List<Product>>() {}).body
-    assertEquals("iPhone X", products[0].title)
+    assertThat(products[0].title).isEqualTo("iPhone X")
 }
 ```
 
