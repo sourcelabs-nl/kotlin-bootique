@@ -4,7 +4,7 @@ In this exercise we will show a real world example of using a DSL written in Kot
 
 ### Configuring the beans
 
-Spring 5 provides a [Kotlin Beans definition DSL](https://docs.spring.io/spring/docs/current/spring-framework-reference/languages.html#kotlin-bean-definition-dsl) to define your application configuration in a different way.
+Spring 5 provides a [Kotlin bean definition DSL](https://docs.spring.io/spring/docs/current/spring-framework-reference/languages.html#kotlin-bean-definition-dsl) to define your application configuration in a different way.
 
 We will add this to our existing Spring Boot application. In this exercise the goal is to make the SpringBootApplication class more concise. Later you can decide whether you like it or not :-)
 
@@ -18,13 +18,13 @@ fun beans(): BeanDefinitionDsl = beans {
 }
 ```
 
-Let migrate the existing Spring configuration to the Kotlin beans definition DSL
+Let migrate the existing Spring configuration to the Kotlin bean definition DSL
 
 **Exercise**: add the beans() function in the BootiqueApplication.kt file.
 
 Now we included the BeanDefinitionDsl we can migrate the existing bean definition.
 
-**Exercise**: add the `@Bean fun api(): Docket` to the beans DSL and remove the `@Bean fun api(): Docket` function.
+**Exercise**: add the `@Bean fun api(): Docket` to the bean DSL and remove the `@Bean fun api(): Docket` function.
 
 You are now done with the conversion to the DSL.
 
@@ -50,6 +50,7 @@ We need to configure the SpringApplication runner to start using the BeanDefinit
 
 ```kotlin
 companion object {
+    @JvmStatic
     fun main(args: Array<String>) {
         runApplication<BootiqueApplication>(*args) {
             addInitializers(...add beans defintion dsl here...)
@@ -90,6 +91,7 @@ class BootiqueApplication {
         /**
          * Runs the Spring boot application.
          */
+        @JvmStatic
         fun main(args: Array<String>) {
             runApplication<BootiqueApplication>(*args) {
                 addInitializers(beans())
@@ -120,6 +122,7 @@ class BootiqueApplication {
         /**
          * Runs the Spring boot application.
          */
+        @JvmStatic
         fun main(args: Array<String>) {
             runApplication<BootiqueApplication>(*args) {
                 beans {
