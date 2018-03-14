@@ -18,7 +18,7 @@ fun beans(): BeanDefinitionDsl = beans {
 }
 ```
 
-Let migrate the existing Spring configuration to the Kotlin beans definition DSL
+Let migrate the existing Spring configuration to the Kotlin bean definition DSL
 
 **Exercise**: add the beans() function in the BootiqueApplication.kt file.
 
@@ -52,7 +52,7 @@ We need to configure the SpringApplication runner to start using the BeanDefinit
 companion object {
     fun main(args: Array<String>) {
         runApplication<BootiqueApplication>(*args) {
-            addInitializers(...add beans defintion dsl here...)
+            addInitializers(...add bean defintion dsl here...)
         }
     }
 }
