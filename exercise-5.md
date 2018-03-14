@@ -250,7 +250,8 @@ fun `test bootique get products endpoint`() {
     val products = restTemplate.exchange("/products", HttpMethod.GET, null, object : ParameterizedTypeReference<List<Product>>() {}).body
     assertEquals(4, products.size)
 }
-```  
+```
+
 </details>
 
 Run the test. Hey! What gives?
