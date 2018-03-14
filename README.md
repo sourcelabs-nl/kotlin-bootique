@@ -24,41 +24,50 @@ Download and install git from [https://git-scm.com/downloads](https://git-scm.co
 
 #### Java
 
-Make sure you have at least JDK8+ installed, both Oracle and OpenJDK are fine. You can check which version is installed by executing in your terminal:
+Make sure you have at least JDK 8 or 9 is installed, both Oracle and OpenJDK are fine. You can check which version is installed by executing in your terminal:
 
 ```
 java --version
 ```
 
-Java can be downloaded from the Oracle website: [http://www.oracle.com/technetwork/java/javase/downloads/index.html](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+Should output something similar like:
 
-#### IntelliJ
+```bash
+➜  kotlin-bootique git:(master) java --version
+java 9.0.1
+Java(TM) SE Runtime Environment (build 9.0.1+11)
+Java HotSpot(TM) 64-Bit Server VM (build 9.0.1+11, mixed mode)
+```
 
-In this tutorial we assume that you will be using IntelliJ because of it`s excellent Kotlin support. IntelliJ Ultimate Edition is preferred but Community edition will also work. 
+Java can be downloaded from the Oracle website: [http://www.oracle.com/technetwork/java/javase/downloads/index.html](http://www.oracle.com/technetwork/java/javase/downloads/index.html).
 
-IntelliJ can be downloaded from: [https://www.jetbrains.com/idea/download/](https://www.jetbrains.com/idea/download/)
+#### IDE - IntelliJ
+
+In this tutorial we assume that you will be using IntelliJ because of it`s excellent Kotlin support! That makes sense considering Kotlin was invented and created by JetBrains, the creator of IntelliJ.
+
+IntelliJ Ultimate Edition is preferred but IntelliJ Community will also work. IntelliJ can be downloaded from: [https://www.jetbrains.com/idea/download/](https://www.jetbrains.com/idea/download/).
 
 #### Sources
 
-First get the Kotlin Bootique application source code on your machine by cloning kotlin-bootique-exercises project from github:
+The Kotlin Bootique exercisescan be found in a separate git repository. Please clone the source to your local machine from github:
 
 ```
 git clone https://github.com/sourcelabs-nl/kotlin-bootique-exercises.git
 ```
 
-Keep the documentation open in your browser to complete the exercises.
+Keep this documentation open in your browser while completing the exercises.
 
 ### Build the application
 
-Open the project with IntelliJ or go with your favorite terminal application to the location where you just cloned the project. 
+Open the project in IntelliJ ( File > Open... ) or navigate with your favorite terminal application to the location where you just cloned the project. 
 
-You can build the project using maven by firing the following command:
+You can build the project using maven by executing the following command: 
 
 ```
 ./mvnw clean install
 ```
 
-_mvnw_ is no typo, this makes sure you are using the maven wrapper file. If you experience issues with you existing maven settings file you can use the provided one.
+_mvnw_ is no typo, this makes sure you are using the maven wrapper file. If you experience issues with you existing maven settings file you can use the provided settings.xml inside the project.
 
 ```
 ./mvnw -s settings.xml clean install
@@ -66,7 +75,7 @@ _mvnw_ is no typo, this makes sure you are using the maven wrapper file. If you 
 
 ### Run the application
 
-Start the application by running the project using the spring-boot maven plugin:
+You can launch the Kotlin Bootique application by running the project using the spring-boot maven plugin. Execute the following maven command:
 
 ```
 ./mvnw spring-boot:run
@@ -76,7 +85,7 @@ Start the application by running the project using the spring-boot maven plugin:
 
 The Kotlin Bootique application exposes a Swagger endpoint that allows you to explore the API: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
-Alternatively you can also execute all the request against the API using curl (or a browser for all the GET requests). 
+Alternatively you can also execute all the request against the API using curl or Postman (or a browser for all the GET requests). 
 
 #### Products
 
@@ -105,11 +114,11 @@ curl -H "Content-Type: application/json" -X POST -d '{"productId":"2","quantity"
 
 ### Next steps
 
-This workshop consist of several exercises that guide you through the process. Each of the exercises are in the kotlin-bootique-exercises project on an separate git branch. 
+This workshop consist of several exercises that will guide you through the process of converting the Java code to Kotlin. Each of the exercises are in the kotlin-bootique-exercises project on an separate git branch. 
 
-By checking out each new exercise you will start of with a working implementation of the previous exercise.
+By checking out each exercise branch, you will start of with a working implementation of the previous exercise.
 
-You can start your journey now by switching to the exercise-1 branch either by using IntelliJ or issue the following command in your terminal:
+You can start your journey now by switching to the exercise-1 branch, either by using IntelliJ or, by issue the following command in your terminal:
 
 ```
 git checkout exercise-1
@@ -117,6 +126,6 @@ git checkout exercise-1
 
 Please keep this documentation open in your browser while completing the exercises.
 
-The documentation for the first exercise: [exercise-1.md](./exercise-1.md)
+The documentation for the first exercise can be found here: [exercise-1.md](./exercise-1.md)
 
 Enjoy the ride!
