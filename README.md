@@ -118,6 +118,8 @@ This workshop consist of several exercises that will guide you through the proce
 
 By checking out each exercise branch, you will start of with a working implementation of the previous exercise.
 
+The lines marked with: **Exercise** are the task that need to be performed!
+
 You can start your journey now by switching to the exercise-1 branch, either by using IntelliJ or, by issue the following command in your terminal:
 
 ```
