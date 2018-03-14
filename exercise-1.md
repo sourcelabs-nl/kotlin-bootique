@@ -8,7 +8,7 @@ This project uses maven for building the application, for gradle projects the sa
 
 Prepare the maven pom.xml for Kotlin. 
  
-**Exercise**: add the `<kotlin.version>` maven property to the pom.xml. We will use this to define the Kotlin version used in this project.
+**Exercise**: add the `<kotlin.version>` maven property to the pom.xml. We will use this property to define the version of Kotlin dependencies used in this project.
 
 
 ```xml
@@ -37,7 +37,7 @@ You project is now ready to use the Kotlin standard library and reflection utili
 
 ### Add the Kotlin maven plugin
 
-Just like with Java, you need to configure a maven plugin for the compilation of Kotlin files, the [kotlin maven plugin](https://kotlinlang.org/docs/reference/using-maven.html). 
+Just like with Java, you need to configure a maven plugin for the compilation of files, in this case, Kotlin files. The [kotlin maven plugin](https://kotlinlang.org/docs/reference/using-maven.html) handles the compilation of Kotlin files. 
 
 **Exercise**: Add the kotlin-maven-plugin to the pom.xml using the snippet below!
 
@@ -72,7 +72,7 @@ Just like with Java, you need to configure a maven plugin for the compilation of
 </plugin>
 ```
 
-Your project is now ready for the compilation of Kotlin files! 
+Your project is now ready for the compilation of Kotlin files! Since we did not alter any of the source directories in our maven configuration, you can just mix Java and Kotlin files in the folder: _src/main/java_
 
 **Exercise**: Build the project using maven by executing the following maven command `./mvnw clean verify`
 
