@@ -69,7 +69,7 @@ private val mockBasketRepository: ProductRepository? = null
 
 Another side-effect of this type of declaration is on the use-site. When calling a function like `bootiqueController.products()` you will get an error; because `bootiqueController` can be null. You will have to use the null-safe assert `bootiqueController!!.products()` or the null-safe operator `bootiqueController?.products()` when calling the function. If only there was a better way...
 
-And there is! Kotlin defines another way to do this, leveraging the lateinit keyword. This keyword can also be used for property/field injection at runtime (although in most cases it makes much more sense to prefer constructor or setter injection over field injection, eliminating the need for this approach).
+And there is! Kotlin defines another way to do this, leveraging the lateinit keyword. This keyword can also be used for property/field injection at runtime (although in most cases it makes much more sense to prefer constructor or setter injection over field injection, elminating the need for this approach).
 
 In case you are using lateinit you logically have to specify the target type for the variable, as this can not be inferred.
 
@@ -180,7 +180,9 @@ whenever(mockBasketRepository.getBasketById(basketId)).thenReturn(basket)
 
 ### Write an application test
 
-**Exercise**: Convert BootiqueApplicationTests.java to Kotlin using IntelliJ (menu > Code > Convert Java File to Kotlin File).
+**Exercise**: Create an applicationtest for the Bootique
+
+Convert the BootiqueApplicationTests.java file to Kotlin using IntelliJ (menu > Code > Convert Java File to Kotlin File).
 
 This application stems from [start.spring.io](http://start.spring.io) and because of that it features a test setup already, for application tests. We are converting our codebase to Kotlin though, so that means we can't really leave this one in its Java form. That would just be silly. 
 
@@ -237,7 +239,7 @@ The `/products` endpoint returns a list of products. In order to employ automati
 testRestTemplate.exchange("/products", HttpMethod.GET, null, object: ParameterizedTypeReference<List<Product>>() {})
 ```
 
-Create the test method and add the call listed above to it. Also add an assert to check if the first item in the list has a title with value "iPhone X".
+Create the test method and add the call listed above to it. Also add an assert to check if the first item in the list has a title with value `"iPhone X"`.
 
 <details>
 <summary>Suggested solution</summary>
