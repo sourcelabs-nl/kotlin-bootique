@@ -355,15 +355,21 @@ inline fun <reified T> TestRestTemplate.postJson(url: String, json: String): Res
 }
 ```
 
-Please note, we used this:
+** Important ** 
+
+In the example we used
 
 `this.exchange(url, HttpMethod.GET, null, object: ParameterizedTypeReference<T>() {})` 
 
-in the previous example, why not replace that with:
+Instead of 
 
 `this.exchange(url, HttpMethod.GET, null, T::class.java)`
 
--- The answer is: because we can't. In this case we'll pass in `List` as the expected resulting class, and this will break. Using the full generic type passed to the function as `T` in the `ParameterizedTypeReference` wíll work. This allows us to have a solution that works for domain types such as `Product` and lists of these types such as `List<Product>` alike. Give it a try to see what happens for yourself.
+which is valid code when using reified generics. Why not use the latter as it is shorter and does not require the use of an anonymous class?
+
+The answer is: because we can't. If we don't use the ParametrizedTypeReference we will lose some relevant typing information. Let's say we are calling this function with `List<Product>` as `T`. Using `T::class.java` will resolve to `List<Object>` at runtime, meaning we've lost `List<Product>` along the way and Spring will not be able to convert to the right object for you. On the JVM, generic type information for classes is not lost so creating an instance of `ParametrizedTypeReference<T>` will allow Spring to still resolve that the intended type was `List<Product>`. T
+
+Writing the code like this gives us a solution that works for domain types such as `Product` and lists of these types such as `List<Product>` alike. Give the two variants a try to see what happens for yourself.
 
 </details> 
 
