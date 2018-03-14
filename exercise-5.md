@@ -346,7 +346,7 @@ fun <T> TestRestTemplate.get(url: String): T = this.exchange(
 ).body
 ```
 
-Debug the test again, and look at the change -- even though the code suggests we are dealing with `List<Product>` the type erasure causes Spring to only be aware of the `List` part. So, we still get a `List` but it is populated with a `LinkedHashMap`, containing all the individual values for the `Product` instance. Not quite the same!
+Debug the test again, and look at the change -- even though the code suggests we are dealing with `List<Product>` the type erasure causes Spring to only be aware of the `List` part. So, we still get a `List` but it is populated with `LinkedHashMap` instances, containing all the individual values from the json, no `Product` instances. Not quite the same!
 
 ```
 products = {java.util.ArrayList@7907}  size = 4
@@ -366,24 +366,9 @@ This should show you the power of reified generics. We can now define extension 
 
 </details> 
 
-If you were able to succesfully make the changes to the method as listed above, you can then implement the full test like listed below. The (inferred) type for `val products` is `List<Product>`. We should get a result of four products (which is the default number of products when starting the service). Let's do a quick assert that this expectation matches.
-
-```kotlin
-@Test
-fun `test bootique get products endpoint`() {
-    val products = restTemplate.get<List<Product>>("/products")
-    assertThat(products.size).isEqualTo(4)
-    assertThat(products[0].title).isEqualTo("iPhone X")
-}
-```
-
-Running the test again after adding the libary should allow it to succeed. This should give you some insight in how Kotlin integrates well with the existing test setup you may already have, how to deal with reserved names and how to write and extension function with reified generics to allow convenient and expressive usage of an injected rest template.
-
-But, if we do not use reified generics and inline the function as we did before, we will lose all type information at runtime! Removing `inline` and `reified` will change the response. Instead of a `List<Product>`, the return type will be a `List<java.util.LinkedHashMap>`. Run the test again, and see that it fails on the assert for `products[0].title`; `LinkedHashMap` does not define a property called `title`. All in all, quite a useful feature, retaining this type information at runtime, which can come in handy when trying to work around the type erasure that haunts Java.
-
 ## Bonus exercise ##
 
-**Exercise** As a final exercise we can also test a post, to the products endpoint for example.This shows off the ability Kotlin has to interpolate (multiline) strings. We are going to be testing the endpoint that adds an article to the basket. Take the test below. Notice that is leverages a multiline string, declared with `"""`. As with any string in Kotlin, we can use string interpolation to set values in the string directly. These are visible as `$productId` and `$quantity` as is visible in the example below. Anything that's accessible in the scope of the method is usable for String interpolation. You could also call methods, such as `${productId.toUpperCase()}`.
+**Exercise** As a final exercise we can also test a post, to the products endpoint for example.This shows off the ability Kotlin has to interpolate (multiline) strings. We are going to be testing the endpoint that adds an article to the basket. Take the test below. Notice the multiline string, declared with `"""`. As with any string in Kotlin, we can use string interpolation to set values in the string directly. These are declared as `$productId` and `$quantity`. Anything that's accessible from the scope of the method can be used in String interpolation. You could also call methods, such as `${productId.toUpperCase()}` for instance.
 
 ```kotlin
 @Test
@@ -411,14 +396,16 @@ fun <T> TestRestTemplate.postJson(url: String, json: String): ResponseEntity<T> 
     val headers = HttpHeaders()
     headers.contentType = MediaType.APPLICATION_JSON
     val entity = HttpEntity(json, headers)
-    return this.postForEntity(url, entity, <CLASS?!>)
+    return this.postForEntity(url, entity, T)
 }
 ```
 
 <details>
 <summary>Suggested solution</summary>
+    
+The function `postJson` will not compile, as `T` is out of place; this function requires a concrete class.    
 
-Reified generics to the rescue again! When using reified generics, you don't only get to hold on to the type information at runtime, as an added bonus you can also extract the class from the generic type, which is nice to define the return type here. Using `T::class.java` will return `java.lang.String` in this case, as we are calling it from the test with `String` as the defined generic type. In this use case it is convenient to have access to this information at runtime.
+Reified generics to the rescue again! When using reified generics, you don't only get to hold on to the type information at runtime, as an added bonus you can also extract the class from the generic type, which is nice to define the return type here. Using `T::class.java` will return `java.lang.String` in this case, as we are calling it from the test with `String` as the defined generic type. Thanks to Kotlin inlining the function we still know the generic type used at runtime.
 
 ```kotlin
 inline fun <reified T> TestRestTemplate.postJson(url: String, json: String): ResponseEntity<T> {
@@ -431,11 +418,11 @@ inline fun <reified T> TestRestTemplate.postJson(url: String, json: String): Res
 
 **Important** 
 
-In the example we used
+In the earlier example for `get` we used:
 
 `this.exchange(url, HttpMethod.GET, null, object: ParameterizedTypeReference<T>() {})` 
 
-Instead of 
+Instead of: 
 
 `this.exchange(url, HttpMethod.GET, null, T::class.java)`
 
