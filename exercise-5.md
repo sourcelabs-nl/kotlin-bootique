@@ -256,27 +256,7 @@ The products val will be of type `List<Product>` thanks to the usage of the `Par
 
 </details>
 
-
-Run the test. Hey! What gives? There's a failing test and a stacktrace. The stracktrace contains the following information:
-
-```
-org.springframework.http.converter.HttpMessageConversionException: Type definition error: [simple type, class com.bootique.bootique.Product]; nested exception is com.fasterxml.jackson.databind.exc.InvalidDefinitionException: Cannot construct instance of `com.bootique.bootique.Product` (no Creators, like default construct, exist): cannot deserialize from Object value (no delegate- or property-based Creator)
- at [Source: (PushbackInputStream); line: 1, column: 3] (through reference chain: java.util.ArrayList[0])
-```
-
-Looks like a message conversion error, Spring and Jackson are having trouble converting the JSON coming from the endpoint back to `List<Product>` instances. This is because data classes are different to 'normal' Java classes, so Jackson requires some assistance in marshalling and unmarshalling these types. Luckily, there's a Kotlin module for Jackson that will help out with this, so modify your pom.xml and add the following:
-
-```xml
-<dependency>
-    <groupId>com.fasterxml.jackson.module</groupId>
-    <artifactId>jackson-module-kotlin</artifactId>
-    <version>${jackson.version}</version>
-</dependency>
-```
-
-The appropriate module will be added based on the already provided Jackson version in the project coming from Spring (`${jackson.version}`). Spring will auto-load any available Jackson extensions on the classpath in its current configuration, so you just have to provide this dependency in the `pom.xml`.
-
-Run the test again, it should now run properly and succeed (provided you built it right) :)
+Run the test, it should run properly and succeed (provided you built it right) :)
 
 **Exercise** Optimizing the test
 
