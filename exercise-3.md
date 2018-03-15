@@ -1,4 +1,6 @@
-## Exercise 3: more conversion fun
+## Exercise 3: 100% to Kotlin
+
+In this exercise we will convert the remaining Java classes to Kotlin, covering some of the Java to Kotlin conversion quirks related to Java streams.
 
 ### Convert Basket.java to Kotlin
 
