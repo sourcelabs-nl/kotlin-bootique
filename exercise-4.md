@@ -36,7 +36,7 @@ fun beans() = beans {
     }
 }
 ```
-We can starting defining the DSL by creating a function in the `BootiqueApplication`. Below is an example of a Kotlin function that returns an instance of a `BeanDefinitionDsl`.
+Lets migrate the bean definition in the `BootiqueApplication` to the Kotlin bean definition DSL. We can do that by adding a Kotlin function that returns an instance of a `BeanDefinitionDsl`.
                                                                           
 ```kotlin
 fun beans(): BeanDefinitionDsl = beans {
@@ -46,7 +46,7 @@ fun beans(): BeanDefinitionDsl = beans {
 }
 ```
 
-**Exercise**: add the beans() function in the `BootiqueApplication` class.
+**Exercise**: add the `beans()` function in the `BootiqueApplication` class.
 
 Now we included the `beans()` function we can migrate the existing bean definition.
 
@@ -72,20 +72,20 @@ fun beans() = beans {
 
 ### Spring Boot 2 and Kotlin
 
-Spring Boot 2 provides a few convenient Kotlin extensions. There is an extension function available which allows you to easily use the Kotlin bean definition DSL in the `SpringApplication` runner:
+Spring Boot 2 provides a few convenient Kotlin extensions. There is an extension function available which allows you to easily use the Kotlin bean definition DSL in the `SpringApplication` runner, see the snippet below:
 
 ```kotlin
 companion object {
     @JvmStatic
     fun main(args: Array<String>) {
         runApplication<BootiqueApplication>(*args) {
-            addInitializers(...add bean defintion dsl here...)
+            addInitializers(...add BeanDefinitionDsl instances here...)
         }
     }
 }
 ```
 
-**Exercise**: Replace the existing main implementation by the `runApplication` extension.
+**Exercise**: Replace the existing main implementation by the `runApplication` extension and include the `BeanDefinitionDsl` in the `addInitializers(...)`.
 
 <details>
 <summary>Suggested solution:</summary>
@@ -127,9 +127,9 @@ class BootiqueApplication {
 </details>
 <br>
 
-We could simplify this code even further by in-lining the `beans()` function inside runApplication.
+We could simplify this code even further by inlining the `beans()` function inside runApplication.
 
-**Exercise**: move the body of  `fun beans()` inside of the `runApplication { ... }` block
+**Exercise**: move the body of `fun beans()` inside of the `runApplication { ... }` block
 
 <details>
 <summary>Suggested solution:</summary>
@@ -166,7 +166,9 @@ class BootiqueApplication {
 </details>
 <br>
 
-We have now succesfully migrate the _old_ configuration to the Kotlin bean DSL. 
+**Exercise**: Build and run the project using maven and see if everything is still working as expected.
+
+We have now successfully migrate the _old_ configuration to the Kotlin bean definition DSL. 
 
 ### Next steps
 
