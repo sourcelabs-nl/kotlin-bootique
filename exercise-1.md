@@ -14,7 +14,7 @@ Prepare the maven pom.xml for Kotlin.
 ```xml
 <properties>
     ...
-    <kotlin.version>1.2.30</kotlin.version>
+    <kotlin.version>1.3.31</kotlin.version>
 </properties>
 ```
 
@@ -23,7 +23,7 @@ Prepare the maven pom.xml for Kotlin.
 ```xml
 <dependency>
     <groupId>org.jetbrains.kotlin</groupId>
-    <artifactId>kotlin-stdlib-jdk8</artifactId>
+    <artifactId>kotlin-stdlib</artifactId>
     <version>${kotlin.version}</version>
 </dependency>
 <dependency>
