@@ -303,10 +303,10 @@ Putting it all together, we can now conveniently call `get` with just the url pa
 ```kotlin
 inline fun <reified T> TestRestTemplate.get(url: String): T = this.exchange(
         url, HttpMethod.GET, null, object: ParameterizedTypeReference<T>() {}
-).body
+)?.body ?: throw RuntimeException()
 ```
 
-Run the test again, it should succeed! We now have a more compact way to call our endpoints.
+Run the test again, it should succeed! We now have a more compact way to call our endpoints. Please note that the body can theoretically be null, so we need to do something to prevent the compiler from complaining. For our testcases, we need the body to be defined at all times, so we can just throw a RuntimeException() to fail the test whenever this situation may occur.
 
 But why the reified generics? The code compiled fine with and without the `inline` and `reified` keywords, so what is the difference? 
 
