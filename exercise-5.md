@@ -61,10 +61,10 @@ If you copied and pasted the Java code listed above, the conversion would have r
 private val bootiqueController: BootiqueController? = null
 
 @Mock
-private val mockProductRepository: ProductRepository? = null
+private val mockBasketRepository: BasketRepository? = null
 
 @Mock
-private val mockBasketRepository: ProductRepository? = null
+private val mockProductRepository: ProductRepository? = null
 ```
 
 Another side-effect of this type of declaration is on the use-site. When calling a function like `bootiqueController.products()` you will get an error; because `bootiqueController` can be null. You will have to use the null-safe assert `bootiqueController!!.products()` or the null-safe operator `bootiqueController?.products()` when calling the function. If only there was a better way...
