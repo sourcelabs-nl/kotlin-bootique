@@ -129,16 +129,12 @@ Add the following configuration to the kotlin-maven-plugin, just after: `<versio
 
 ```xml
 ...
-<artifactId>kotlin-maven-plugin</artifactId>
-<groupId>org.jetbrains.kotlin</groupId>
-<version>${kotlin.version}</version>
 <configuration>
     <compilerPlugins>
         <plugin>spring</plugin>
     </compilerPlugins>
     <jvmTarget>1.8</jvmTarget>
 </configuration>
-<executions>
 ...
 ```
 </details>
