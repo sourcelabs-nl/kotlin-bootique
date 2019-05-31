@@ -41,10 +41,10 @@ In Java, you could end up with something similar to the listing below.
 private BootiqueController bootiqueController;
 
 @Mock
-private ProductRepository mockProductRepository;
+private ProductRepository mockBasketRepository;
 
 @Mock
-private ProductRepository mockBasketRepository;
+private ProductRepository mockProductRepository;
 ```
 
 Without just converting (because that is almost like cheating ;), define the same thing in Kotlin.
