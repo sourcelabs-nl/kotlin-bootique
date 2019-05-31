@@ -92,7 +92,7 @@ Two interesting things about the converted code. First have a look at the getBas
 
 **Exercise**: remove the cast to `java.util.Map<String, Basket>`
 
-See if you can find a method in the Kotlin map which would be a nice replacement for computeIfAbsent
+See if you can find a method in the Kotlin standard library for `Collections` which could be a nice replacement for `computeIfAbsent`.
 
 **Exercise**: replace `computeIfAbsent` by a more concise Kotlin alternative
 
