@@ -228,7 +228,7 @@ val products = response.body!!
 
 The response body will be of type `List<Product>` thanks to the usage of the `ParameterizedTypeReference` which helps Spring work out the collection generic type for calls returning collections. This way the `exchange` method will return a `ResponseBody<List<Product>>`. It is a bit verbose though, and requires the use of an anonymous inner class, which in Kotlin is defined using `object : ParameterizedTypeReference<List<Product>>() {}`. This class does not define any abstract method so we can just provide an empty body, but we would have to provide it in every test method.
 
-**Exercise**: Create the test method and add the call listed above to it. Also add an assert to check if the first item in the list has a title with value `"iPhone X"`.
+**Exercise**: Create the test method and add the call listed above to it. Also add an assert to check if the first item in the list has a title with value `"iPhone X"`. Run the test, it should run properly and succeed (provided you built it right) :)
 
 <details>
 <summary>Suggested solution</summary>
@@ -248,10 +248,6 @@ fun `get products endpoint should return a list of products`() {
 ```
 
 </details>
-
-Run the test, it should run properly and succeed (provided you built it right) :)
-
-Optimizing the test
 
 As a final exercise, let's leverage some interesting features Kotlin has to offer, extension functions and reified generics, to shorten the TestRestTemplate call.
 
