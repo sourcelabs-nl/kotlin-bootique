@@ -127,9 +127,11 @@ class BootiqueApplication {
 </details>
 <br>
 
-We could simplify this code even further by inlining the `beans()` function inside runApplication.
+We could simplify this code even further. In Kotlin we dont need a class/companion object to run the application, we can move the main function to a top-level function. We can also inline the `beans()` function inside runApplication. 
 
-**Exercise**: move the body of `fun beans()` inside of the `runApplication { ... }` block
+**Exercise**: Change the main to a top-level function. 
+
+**Exercise**: Inline the body of `fun beans()` inside of the `runApplication { ... }` block
 
 <details>
 <summary>Suggested solution:</summary>
@@ -140,26 +142,21 @@ We could simplify this code even further by inlining the `beans()` function insi
  */
 @SpringBootApplication
 @EnableSwagger2
-class BootiqueApplication {
+class BootiqueApplication
 
-    companion object {
-        /**
-         * Runs the Spring boot application.
-         */
-        @JvmStatic
-        fun main(args: Array<String>) {
-            runApplication<BootiqueApplication>(*args) {
-                beans {
-                    bean<Docket> {
-                        Docket(DocumentationType.SWAGGER_2)
-                                .select()
-                                .apis(RequestHandlerSelectors.any())
-                                .paths(PathSelectors.any())
-                                .build()
-                    }
+fun main(args: Array<String>) {
+    runApplication<BootiqueApplication>(*args) {
+        addInitializers(
+            beans {
+                bean<Docket> {
+                    Docket(DocumentationType.SWAGGER_2)
+                            .select()
+                            .apis(RequestHandlerSelectors.any())
+                            .paths(PathSelectors.any())
+                            .build()
                 }
             }
-        }
+        )
     }
 }
 ```
