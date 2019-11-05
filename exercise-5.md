@@ -335,7 +335,7 @@ Of course, we are well aware that these tests are somewhat representative of the
 
 **So, we encourage you to experiment, experiment and experiment some more. Kotlin might just be that Java replacement you didn't know you'd like so much.**
 
-For the final implementation of this service including the tests above in Kotlin, checkout the `final` branch.
+For the final implementation of this service including the tests above in Kotlin, checkout the [`final` solution branch](https://github.com/sourcelabs-nl/kotlin-bootique-exercises/tree/final).
 
 ## Thank you for participating! ##
 
