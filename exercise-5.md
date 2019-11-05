@@ -6,8 +6,6 @@ Last but not least, we are going to convert the test code from Java to Kotlin an
 
 Let's start out by finally adding a simple unit test. Normally of course we would strive towards sensible (branch) coverage targets, but for now we'll just settle for being able to test one of our components. Let's start by writing a test for the BootiqueController class.
 
-**Exercise** Implement a test class for the BootiqueController
-
 In the `src/main/test` folder the file BootiqueControllerTest should be available. It has no contents yet, this is left for you to provide.
 
 We are going to be using a mocking framework to mock out our dependencies. Spring test conveniently bundles Mockito so let's use that. First thing to do now, is to define the MockitoRunner as the testrunner for your unit test. Add it now.
@@ -17,6 +15,8 @@ In java you would do something like the listing below. Define the test class and
 ```java
 @RunWith(MockitoJUnitRunner.class)
 ```
+
+**Exercise** Convert the test to Kotlin and add the MockitoJUnitRunner to is.
 
 <details>
 <summary>Suggested solution</summary>
@@ -29,8 +29,6 @@ class BootiqueControllerTest
 ```
 </details>
 <br>
-
-**Exercise** Define the instance we are testing and the mocks Mockito should inject
 
 We are now going to define the unit we are testing and the mocks required for this test. 
 
@@ -45,7 +43,7 @@ private ProductRepository mockBasketRepository;
 private ProductRepository mockProductRepository;
 ```
 
-Without just converting (because that is almost like cheating ;), define the same thing in Kotlin.
+**Exercise** Without just converting (because that is almost like cheating ;), define the same thing in Kotlin.
 
 <details>
 <summary>Possible solution</summary>
@@ -80,9 +78,7 @@ private lateinit var mockProductRepository: ProductRepository
 </details>
 <br>
 
-**Exercise** Write a simple test for the `getBasket()` operation.
-
-To do this, we'd have to use the basketRepository mock, and instruct it to behave in a certain way. This is the test you could possibly write in java:
+Now lets write a simple test for the `getBasket()` operation. To do this, we'd have to use the basketRepository mock, and instruct it to behave in a certain way. This is the test you could possibly write in java:
 
 ```java
 @Test
@@ -96,7 +92,7 @@ public void testRetrieveBasket() {
 }
 ```
 
-Now create the Kotlin equivalent. See the imports that go with the snippet above listed here.
+**Exercise** Create the Kotlin equivalent. See the imports that go with the snippet above listed here.
 
 ```
 import org.assertj.core.api.Assertions.assertThat
@@ -134,9 +130,7 @@ fun `test retrieving basket functionality`() {
 </details>
 <br>
 
-**Pro-tip if you find you are getting stuck writing the tests in Kotlin: Write the test in java and convert/copy it into a kotlin file. The conversion will be automatic (via a prompt) and can help you to figure out how to write some of the code in Kotlin.** 
-
-**Exercise** Remove the need for backticks around the when
+**Tip** If you find you are getting stuck writing the tests in Kotlin: Write the test in java and convert/copy it into a kotlin file. The conversion will be automatic (via a prompt) and can help you to figure out how to write some of the code in Kotlin. 
 
 If the backticks around `when` give you a headache too you can write a helper function that encapsulates 
 this. The definition for Mockito.when is the following:
@@ -147,8 +141,9 @@ public static <T> OngoingStubbing<T> when(T methodCall) {
 }
 ``` 
 
-It is a convenient static function, so we can write a Kotlin function that wraps this and substitutes the
-definition of `when` with `whenever`.
+It is a convenient static function, so we can write a Kotlin function that wraps this and substitutes the definition of `when` with `whenever`.
+
+**Exercise** Implement this function in Kotlin and replace the usage of `when` from the test code.
 
 <details>
 <summary>Suggested solution</summary>
@@ -180,15 +175,9 @@ You can also add a useful library to your codebase named [mockito-kotlin](https:
 
 ### Write an application test
 
-**Exercise**: Create an SpringBootTest for the Bootique
-
-Convert the BootiqueApplicationTests.java file to Kotlin using IntelliJ (menu > Code > Convert Java File to Kotlin File).
-
 This application stems from [start.spring.io](http://start.spring.io) and because of that it features a test setup already, for application tests. We are converting our codebase to Kotlin though, so that means we can't really leave this one in its Java form. That would just be silly. 
 
-The first step would be to convert the test to Kotlin code, so do so now.
-
-**Exercise**: Set up the Spring [WebEnvironment](https://spring.io/guides/gs/testing-web/) for application testing
+**Exercise**: Convert the BootiqueApplicationTests.java file to Kotlin using IntelliJ (menu > Code > Convert Java File to Kotlin File).
 
 We are going to test the app by calling an endpoint, so we'll be modifying the test. We are first going to tell Spring Boot to start a server (on a random port) and will wire in a TestRestTemplate to call the service.
 
@@ -206,7 +195,7 @@ when activating the web environment. It will be provided with host and port prec
 private TestRestTemplate testRestTemplate;
 ```
 
-Adapt the logic above to Kotlin for use in the `BootiqueApplicationTests`.
+**Exercise**: Adapt the logic above to Kotlin for use in the `BootiqueApplicationTests`. Run the test so the context should load, injection of the `TestRestTemplate` should succeed.
 
 <details>
 <summary>Suggested solution</summary>
@@ -223,10 +212,6 @@ class BootiqueApplicationTest {
 } 
 ```
 </details>
-
-Run the setup, the context should load, injection of the `TestRestTemplate` should succeed.
-
-**Exercise**: Add the actual test
 
 Let's define the test. Implement the body of this function, by using the `TestRestTemplate` to call the service. As we saw with the `when` function a while ago, using backticks allows you to specify method names that may clash with Kotlin keywords. You can also include whitespace in the name of the method -- meaning you can have expressive test names, which can be very helpful when testing.
 
@@ -245,7 +230,7 @@ val products = response.body!!
 
 The response body will be of type `List<Product>` thanks to the usage of the `ParameterizedTypeReference` which helps Spring work out the collection generic type for calls returning collections. This way the `exchange` method will return a `ResponseBody<List<Product>>`. It is a bit verbose though, and requires the use of an anonymous inner class, which in Kotlin is defined using `object : ParameterizedTypeReference<List<Product>>() {}`. This class does not define any abstract method so we can just provide an empty body, but we would have to provide it in every test method.
 
-Create the test method and add the call listed above to it. Also add an assert to check if the first item in the list has a title with value `"iPhone X"`.
+**Exercise**: Create the test method and add the call listed above to it. Also add an assert to check if the first item in the list has a title with value `"iPhone X"`.
 
 <details>
 <summary>Suggested solution</summary>
@@ -268,7 +253,7 @@ fun `get products endpoint should return a list of products`() {
 
 Run the test, it should run properly and succeed (provided you built it right) :)
 
-**Exercise** Optimizing the test
+Optimizing the test
 
 As a final exercise, let's leverage some interesting features Kotlin has to offer, extension functions and reified generics, to shorten the TestRestTemplate call.
 
@@ -280,7 +265,9 @@ We can also write the call in a more concise way by leveraging reified generics 
 var response = testRestTemplate.exchange<List<Product>>("/products", HttpMethod.GET, HttpEntity.EMPTY, object : ParameterizedTypeReference<List<Product>>() {})
 ```
 
-Futhermore, the org.springframework.boot.test.web.client.exchange extension function allows for even a shorter syntax. Try to adjust the testRestTemplate.exchange call to use the extension.
+Futhermore, the org.springframework.boot.test.web.client.exchange extension function allows for even a shorter syntax. 
+
+**Exercise** Try to adjust the testRestTemplate.exchange call to use the extension.
 
 <details>
 <summary>Suggested solution</summary>
@@ -293,8 +280,7 @@ var response = testRestTemplate.exchange<List<Product>>("/products", HttpMethod.
 
 </details> 
 
-
-**Exercise** As a final exercise we can also test a post, to the products endpoint for example. This shows off the ability Kotlin has to interpolate (multiline) strings. We are going to be testing the endpoint that adds an article to the basket. Take the test below. Notice the multiline string, declared with `"""`. As with any string in Kotlin, we can use string interpolation to set values in the string directly. These are declared as `$productId` and `$quantity`. Anything that's accessible from the scope of the method can be used in String interpolation. You could also call methods, such as `${productId.toUpperCase()}` for instance.
+As a final exercise we can also test a post, to the products endpoint for example. This shows off the ability Kotlin has to interpolate (multiline) strings. We are going to be testing the endpoint that adds an article to the basket. Take the test below. Notice the multiline string, declared with `"""`. As with any string in Kotlin, we can use string interpolation to set values in the string directly. These are declared as `$productId` and `$quantity`. Anything that's accessible from the scope of the method can be used in String interpolation. You could also call methods, such as `${productId.toUpperCase()}` for instance.
 
 Spring provides convenient extensions for the TestRestTemplate like the postForEntity extension (which is not being used in the example below).
 
@@ -319,7 +305,7 @@ fun `add product to basket results in updated basket`() {
 }
 ```
 
-Now, as an assignment, get the example above working again using the postForEntity extension. Add the variables to the multi-line string. Add the correct content-type header to the HttpEntity. Try to solve this using the apply function!
+**Exercise**  Try to get the example above working again using the postForEntity extension. Add the variables to the multi-line string. Add the correct content-type header to the HttpEntity. Try to solve this using the apply function!
 
 ```kotlin
 val headers = HttpHeaders()
