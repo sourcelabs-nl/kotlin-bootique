@@ -82,10 +82,8 @@ Now lets write a simple test for the `getBasket()` operation. To do this, we'd h
 @Test
 public void testRetrieveBasket() {
     final String basketId = "BasketId";
-    final Basket basket = new Basket();
-    
+    final Basket basket = new Basket(); 
     when(mockBasketRepository.getBasketById(basketId)).thenReturn(basket);
-    
     assertThat(bootiqueController.getBasket(basketId)).isEqualTo(basket);
 }
 ```
@@ -118,9 +116,7 @@ names.
 fun `test retrieving basket functionality`() {
     val basketId = "BasketId"
     val basket = Basket()
-    
     `when`(mockBasketRepository.getBasketById(basketId)).thenReturn(basket)
-    
     assertThat(bootiqueController.getBasket(basketId)).isEqualTo(basket)
 }
 ```
@@ -251,15 +247,24 @@ fun `get products endpoint should return a list of products`() {
 
 As a final exercise, let's leverage some interesting features Kotlin has to offer, extension functions and reified generics, to shorten the TestRestTemplate call.
 
-Spring provides out-of-the-box extension for this but we need to explicitly import such extensions. 
+Spring provides out-of-the-box extension for this but we need to explicitly import such extensions: Futhermore, org.springframework.boot.test.web.client.exchange 
 
-We can also write the call in a more concise way by leveraging reified generics in Kotlin (which is out of scope for this workshop but we will explain it here anyway). When leveraging reified generics, we can omit the type from the variable declaration but we need to add it to the function (exchange<List<Product>>) call. If you look in the Spring source code you will see that the exchange function uses the reified keyword, therefore the compiler is still able to determine the inferred type for our (response) variable.
+By using the exchange extension function and leveraging reified generics in Kotlin (which is out of scope for this workshop but we will explain it here anyway) we can write the code in an even more concise way. When leveraging reified generics, we can omit the therefore we can omit the `object : ParameterizedTypeReference<List<Product>>() {}` parameter passed in the exchange function. It allows us to either specify the expected type in the variable declaration or to add it to the function call (`testRestTemplate.exchange<List<Product>>`). If you look at the Spring source code snippet below you will see how the exchange function uses the reified keyword:
 
 ```kotlin
-var response = testRestTemplate.exchange<List<Product>>("/products", HttpMethod.GET, HttpEntity.EMPTY, object : ParameterizedTypeReference<List<Product>>() {})
+public inline fun <reified T : kotlin.Any> org.springframework.boot.test.web.client.TestRestTemplate.exchange(...)
 ```
 
-Futhermore, the org.springframework.boot.test.web.client.exchange extension function allows for even a shorter syntax. 
+Because of this the compiler is still able to determine the inferred type for our response variable. Allowing us to write:
+
+```kotlin
+val response = testRestTemplate.exchange<List<Product>>("/products", HttpMethod.GET, HttpEntity.EMPTY)
+```
+or
+
+```kotlin
+val response: ResponseEntity<List<Product>> = testRestTemplate.exchange("/products", HttpMethod.GET, HttpEntity.EMPTY)
+```
 
 **Exercise**: Try to adjust the testRestTemplate.exchange call to use the extension.
 
@@ -269,7 +274,7 @@ Futhermore, the org.springframework.boot.test.web.client.exchange extension func
 ```kotlin
 import org.springframework.boot.test.web.client.exchange
 
-var response = testRestTemplate.exchange<List<Product>>("/products", HttpMethod.GET, HttpEntity.EMPTY)
+val response = testRestTemplate.exchange<List<Product>>("/products", HttpMethod.GET, HttpEntity.EMPTY)
 ```
 
 </details> 
