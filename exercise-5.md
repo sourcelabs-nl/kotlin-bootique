@@ -241,11 +241,10 @@ Let's define the test. Implement the body of this function, by using the `TestRe
 fun `get products endpoint should return a list of products`() {}
 ```
 
-The `/products` endpoint returns a list of products. In order to employ automatic conversion to List<Product> we can use a class called `ParameterizedTypeReference<T>` which will use a typed return value for the template. Consider the following call which (thanks to the `ParameterizedTypeReference` will return a `List<Product>`:
+The `/products` endpoint returns a list of products. In order to employ automatic conversion to List<Product> we can use a class called `ParameterizedTypeReference<T>` which will use a typed return value for the template. Consider the following call which (thanks to the `ParameterizedTypeReference<List<Product>`) will return a `List<Product>` as the body:
 
 ```kotlin
 var response: ResponseEntity<List<Product>> = testRestTemplate.exchange("/products", HttpMethod.GET, null, object : ParameterizedTypeReference<List<Product>>() {})
-
 val products = response.body!!
 ```
 
@@ -259,12 +258,12 @@ The resulting test would look something like this:
 ```kotlin
 @Test
 fun `get products endpoint should return a list of products`() {
-val response = testRestTemplate.exchange<List<Product>>("/products", HttpMethod.GET, HttpEntity.EMPTY)
-assertThat(response.statusCode.value()).isEqualTo(200)
+    val response = testRestTemplate.exchange<List<Product>>("/products", HttpMethod.GET, HttpEntity.EMPTY)
+    assertThat(response.statusCode.value()).isEqualTo(200)
 
-val products = response.body!!
-assertThat(products.size).isEqualTo(4)
-assertThat(products.first().title).isEqualTo("iPhone X")
+    val products = response.body!!
+    assertThat(products.size).isEqualTo(4)
+    assertThat(products.first().title).isEqualTo("iPhone X")
 }
 ```
 
