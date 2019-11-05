@@ -244,21 +244,24 @@ fun `get products endpoint should return a list of products`() {}
 The `/products` endpoint returns a list of products. In order to employ automatic conversion to List<Product> we can use a class called `ParameterizedTypeReference<T>` which will use a typed return value for the template. Consider the following call which (thanks to the `ParameterizedTypeReference<List<Product>`) will return a `List<Product>` as the body:
 
 ```kotlin
-var response: ResponseEntity<List<Product>> = testRestTemplate.exchange("/products", HttpMethod.GET, null, object : ParameterizedTypeReference<List<Product>>() {})
-val products = response.body!!
+var response: ResponseEntity<List<Product>> = testRestTemplate.exchange("/products", HttpMethod.GET, HttpEntity.EMPTY, object : ParameterizedTypeReference<List<Product>>() {})
+val products = response.body!! 
+// todo
 ```
+
+The response body will be of type `List<Product>` thanks to the usage of the `ParameterizedTypeReference` which helps Spring work out the collection generic type for calls returning collections. This way the `exchange` method will return a `ResponseBody<List<Product>>`. It is a bit verbose though, and requires the use of an anonymous inner class, which in Kotlin is defined using `object : ParameterizedTypeReference<List<Product>>() {}`. This class does not define any abstract method so we can just provide an empty body, but we would have to provide it in every test method.
 
 Create the test method and add the call listed above to it. Also add an assert to check if the first item in the list has a title with value `"iPhone X"`.
 
 <details>
 <summary>Suggested solution</summary>
 
-The resulting test would look something like this:
+The resulting test could look something like this:
 
 ```kotlin
 @Test
 fun `get products endpoint should return a list of products`() {
-    val response = testRestTemplate.exchange<List<Product>>("/products", HttpMethod.GET, HttpEntity.EMPTY)
+    val response: ResponseEntity<List<Product>> = testRestTemplate.exchange("/products", HttpMethod.GET, HttpEntity.EMPTY, object : ParameterizedTypeReference<List<Product>>() {})
     assertThat(response.statusCode.value()).isEqualTo(200)
 
     val products = response.body!!
@@ -267,19 +270,23 @@ fun `get products endpoint should return a list of products`() {
 }
 ```
 
-The products val will be of type `List<Product>` thanks to the usage of the `ParameterizedTypeReference` which helps Spring work out the collection generic type for calls returning collections. This way the `exchange` method will return a `ResponseBody<List<Product>>`. It is a bit verbose though, and requires the use of an anonymous inner class, which in Kotlin is defined using `object : ParameterizedTypeReference<List<Product>>() {}`. This class does not define any abstract method so we can just provide an empty body, but we would have to provide it in every test method.
-
 </details>
 
 Run the test, it should run properly and succeed (provided you built it right) :)
 
 **Exercise** Optimizing the test
 
-As a final exercise, let's leverage three interesting features Kotlin has to offer: Extension functions and inlining + reified generics to shorten the RestTemplate call.
+As a final exercise, let's leverage three interesting features Kotlin has to offer: Extension functions and reified generics to shorten the TestRestTemplate call.
 
 Spring provides out-of-the-box extension for this but we need to explicitly import such extensions. 
 
-Import org.springframework.boot.test.web.client.exchange and try to adjust the testRestTemplate.exchange call to use the extension.
+We can also write the call in a more concise way by leveraging reified generics in Kotlin (which is out of scope for this workshop but we will explain it here anyway). When leveraging reified generics, we can omit the type from the variable declaration but we need to add it to the function (exchange<List<Product>>) call. If you look in the Spring source code you will see that the exchange function uses the reified keyword, therefore the compiler is still able to determine the inferred type for our (response) variable.
+
+```kotlin
+var response = testRestTemplate.exchange<List<Product>>("/products", HttpMethod.GET, HttpEntity.EMPTY, object : ParameterizedTypeReference<List<Product>>() {})
+```
+
+Futhermore, the org.springframework.boot.test.web.client.exchange extension function allows for even a shorter syntax. Try to adjust the testRestTemplate.exchange call to use the extension.
 
 <details>
 <summary>Suggested solution</summary>
@@ -287,7 +294,7 @@ Import org.springframework.boot.test.web.client.exchange and try to adjust the t
 ```kotlin
 import org.springframework.boot.test.web.client.exchange
 
-val products = testRestTemplate.exchange<List<Product>>("/products", HttpMethod.GET, HttpEntity.EMPTY).body
+var response = testRestTemplate.exchange<List<Product>>("/products", HttpMethod.GET, HttpEntity.EMPTY)
 ```
 
 </details> 
