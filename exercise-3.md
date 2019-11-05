@@ -82,6 +82,31 @@ fun getTotalPrice() = items.sumBy { it.totalPrice }
 </details>
 <br>
 
+Still there is some noise in the file caused by the constructors. We can combine the following code in the primary constructor for the class:
+
+```kotlin
+private val orderItems: MutableList<OrderItem>
+
+constructor() {
+    orderItems = ArrayList()
+}
+
+constructor(orderItems: MutableList<OrderItem>) {
+    this.orderItems = orderItems
+}
+```
+
+**Exercise**: Write a primary constructor for the Basket class which has a single property orderItems: MutableList<OrderItem>. Does the code still work?
+
+<details>
+  <summary>Suggested solution:</summary>
+
+```kotlin
+class Basket(val orderItems: MutableList<OrderItem> = mutableListOf()) 
+```
+</details>
+
+
 ### Convert BasketRepository.java to Kotlin
 
 Open `BasketRepository.java`
@@ -189,16 +214,16 @@ The resulting code looks pretty ok.
 
 The `addToBasket()` function can still be improved. What if we are not able to find the product for the given productId? The converted code will throw a Kotlin NullPointException because of the !! in `productById!!.listPrice`. A potential fix would be to properly check if we got result from `productRepository.getProductById(orderItem.productId)`.
 
-**Exercise**: Add a null check for non existing products and throw an IllegalArgumentException if not found.
+**Exercise**: Add a null check for non existing products and throw an RuntimeException if not found.
 
 <details>
 <summary>The resulting code should look like this:</summary>
 
 ```kotlin
-    @PostMapping(path = arrayOf("/baskets/{id}/items"), consumes = arrayOf(MediaType.APPLICATION_JSON_UTF8_VALUE))
+    @PostMapping(path = arrayOf("/baskets/{id}/items"), consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun addToBasket(@PathVariable("id") id: String, @RequestBody orderItem: OrderItem): Basket {
         val productById = productRepository.getProductById(orderItem.productId) ?:
-                throw IllegalArgumentException("Product with productId: ${orderItem.productId} not found!")
+                throw RuntimeException("Product with productId: ${orderItem.productId} not found!")
         val basket = basketRepository.getBasketById(id)
         basket.addOrderItem(OrderItem(orderItem.productId, orderItem.quantity, productById.listPrice))
         return basket
@@ -207,21 +232,17 @@ The `addToBasket()` function can still be improved. What if we are not able to f
 </details>
 <br>
 
-A frequently heard complaint in previous versions of Kotlin is the necessity to to wrap Array[] properties of an annotation with arrayOf(). Since Kotlin 1.2 you can use the [] block notation instead of the arrayOf() syntax.
-
-**Exercise**: Replace the `arrayOf()` by `[]` in the `BootiqueController` @Annotations where possible.
-
-**Bonus**: We could polish the addToBasket function a bit more by removing the need to define the intermediate `val basket`. We can do this by directly calling the the [apply](https://dzone.com/articles/examining-kotlins-also-apply-let-run-and-with-intentions) function on `basketRepository.getBasketById(id)`. It would also be better to invoke `productRepository.getProductById()` inside the apply {} instead of before.
+**Exercise**: We could polish the addToBasket function a bit more by removing the need to define the intermediate `val basket`. We can do this by directly calling the the [apply](https://dzone.com/articles/examining-kotlins-also-apply-let-run-and-with-intentions) function on `basketRepository.getBasketById(id)`. It would also be better to invoke `productRepository.getProductById()` inside the apply {} instead of before.
 
 <details>
 <summary>Suggested solution:</summary>
 
 ```kotlin
-    @PostMapping(path = ["/baskets/{id}/items"], consumes = [MediaType.APPLICATION_JSON_UTF8_VALUE])
+    @PostMapping(path = ["/baskets/{id}/items"], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun addToBasket(@PathVariable id: String, @RequestBody orderItem: OrderItem): Basket {
         return basketRepository.getBasketById(id).apply {
             val product = productRepository.getProductById(orderItem.productId)
-                    ?: throw IllegalArgumentException("Product with productId: ${orderItem.productId} not found!")
+                    ?: throw RuntimeException("Product with productId: ${orderItem.productId} not found!")
             addOrderItem(OrderItem(orderItem.productId, orderItem.quantity, product.listPrice))
         }
     }
