@@ -32,17 +32,15 @@ class BootiqueControllerTest
 
 **Exercise** Define the instance we are testing and the mocks Mockito should inject
 
-We are now going to define the unit we are testing and the mocks required by this unitto function. 
+We are now going to define the unit we are testing and the mocks required for this test. 
 
 In Java, you could end up with something similar to the listing below.
 
 ```java
 @InjectMocks
 private BootiqueController bootiqueController;
-
 @Mock
 private ProductRepository mockBasketRepository;
-
 @Mock
 private ProductRepository mockProductRepository;
 ```
@@ -59,10 +57,8 @@ If you copied and pasted the Java code listed above, the conversion would have r
 ```kotlin
 @InjectMocks
 private val bootiqueController: BootiqueController? = null
-
 @Mock
 private val mockBasketRepository: BasketRepository? = null
-
 @Mock
 private val mockProductRepository: ProductRepository? = null
 ```
@@ -76,10 +72,8 @@ In case you are using lateinit you logically have to specify the target type for
 ```kotlin
 @InjectMocks
 private lateinit var bootiqueController: BootiqueController
-
 @Mock
 private lateinit var mockBasketRepository: BasketRepository
-
 @Mock
 private lateinit var mockProductRepository: ProductRepository
 ```
