@@ -24,7 +24,7 @@ Download and install git from [https://git-scm.com/downloads](https://git-scm.co
 
 #### Java
 
-Make sure you have at least JDK 8 or 9 is installed, both Oracle and OpenJDK are fine. You can check which version is installed by executing in your terminal:
+Make sure you have at least JDK 8 or 11 installed. You can check which version is installed by executing in your terminal:
 
 ```
 java --version
@@ -33,13 +33,13 @@ java --version
 Should output something similar like:
 
 ```bash
-➜  kotlin-bootique git:(master) java --version
-java 9.0.1
-Java(TM) SE Runtime Environment (build 9.0.1+11)
-Java HotSpot(TM) 64-Bit Server VM (build 9.0.1+11, mixed mode)
+java -version
+openjdk version "11.0.5" 2019-10-15
+OpenJDK Runtime Environment AdoptOpenJDK (build 11.0.5+10)
+OpenJDK 64-Bit Server VM AdoptOpenJDK (build 11.0.5+10, mixed mode)
 ```
 
-Java can be downloaded from the Oracle website: [http://www.oracle.com/technetwork/java/javase/downloads/index.html](http://www.oracle.com/technetwork/java/javase/downloads/index.html).
+Java can be downloaded from the AdaptOpenJDK website: [https://adoptopenjdk.net/](https://adoptopenjdk.net/). Or, if you really need to, from the Oracle website: [http://www.oracle.com/technetwork/java/javase/downloads/index.html](http://www.oracle.com/technetwork/java/javase/downloads/index.html).
 
 #### IDE - IntelliJ
 
@@ -67,7 +67,7 @@ You can build the project using maven by executing the following command:
 ./mvnw clean install
 ```
 
-_mvnw_ is no typo, this makes sure you are using the maven wrapper file. If you experience issues with you existing maven settings file you can use the provided settings.xml inside the project.
+_mvnw_ is no typo, this makes sure you are using the maven wrapper file. If you experience issues with you existing maven settings file you can use the provided settings.xml inside the project. Or temporarily renamed your settings.xml to settings.tmp.
 
 ```
 ./mvnw -s settings.xml clean install
