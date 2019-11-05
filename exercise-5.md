@@ -16,7 +16,7 @@ In java you would do something like the listing below.
 @RunWith(MockitoJUnitRunner.class)
 ```
 
-**Exercise** Convert the test to Kotlin and add the MockitoJUnitRunner to it.
+**Exercise**: Convert the test to Kotlin and add the MockitoJUnitRunner to it.
 
 <details>
 <summary>Suggested solution</summary>
@@ -41,7 +41,7 @@ private ProductRepository mockBasketRepository;
 private ProductRepository mockProductRepository;
 ```
 
-**Exercise** Without just converting (because that is almost like cheating ;), define the same thing in Kotlin.
+**Exercise**: Without just converting (because that is almost like cheating ;), define the same thing in Kotlin.
 
 <details>
 <summary>Possible solution</summary>
@@ -90,7 +90,7 @@ public void testRetrieveBasket() {
 }
 ```
 
-**Exercise** Create the Kotlin equivalent. See the imports that go with the snippet above listed here.
+**Exercise**: Create the Kotlin equivalent. See the imports that go with the snippet above listed here.
 
 ```
 import org.assertj.core.api.Assertions.assertThat
@@ -141,7 +141,7 @@ public static <T> OngoingStubbing<T> when(T methodCall) {
 
 It is a convenient static function, so we can write a Kotlin function that wraps this and substitutes the definition of `when` with `whenever`.
 
-**Exercise** Implement this function in Kotlin and replace the usage of `when` from the test code.
+**Exercise**: Implement this function in Kotlin and replace the usage of `when` from the test code.
 
 <details>
 <summary>Suggested solution</summary>
@@ -261,7 +261,7 @@ var response = testRestTemplate.exchange<List<Product>>("/products", HttpMethod.
 
 Futhermore, the org.springframework.boot.test.web.client.exchange extension function allows for even a shorter syntax. 
 
-**Exercise** Try to adjust the testRestTemplate.exchange call to use the extension.
+**Exercise**: Try to adjust the testRestTemplate.exchange call to use the extension.
 
 <details>
 <summary>Suggested solution</summary>
@@ -299,7 +299,7 @@ fun `add product to basket results in updated basket`() {
 }
 ```
 
-**Exercise**  Try to get the example above working again using the postForEntity extension. Add the variables to the multi-line string. Add the correct content-type header to the HttpEntity. Try to solve this using the apply function!
+**Exercise**: Try to get the example above working again using the postForEntity extension. Add the variables to the multi-line string. Add the correct content-type header to the HttpEntity. Try to solve this using the apply function!
 
 ```kotlin
 val headers = HttpHeaders()
