@@ -30,9 +30,7 @@ class BootiqueControllerTest
 </details>
 <br>
 
-We are now going to define the unit we are testing and the mocks required for this test. 
-
-In Java, you could end up with something similar to the listing below.
+We are now going to define the unit we are testing and the mocks required for this test. In Java, using mockito you could end up with something similar to the listing below.
 
 ```java
 @InjectMocks
