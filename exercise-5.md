@@ -241,10 +241,12 @@ Let's define the test. Implement the body of this function, by using the `TestRe
 fun `get products endpoint should return a list of products`() {}
 ```
 
-The `/products` endpoint returns a list of products. In order to employ automatic conversion to List<Product> we can use a class called `ParameterizedTypeReference` which will use a typed return value for the template. Consider the following call which (thanks to the `ParameterizedTypeReference` will return a `List<Product>`:
+The `/products` endpoint returns a list of products. In order to employ automatic conversion to List<Product> we can use a class called `ParameterizedTypeReference<T>` which will use a typed return value for the template. Consider the following call which (thanks to the `ParameterizedTypeReference` will return a `List<Product>`:
 
 ```kotlin
-testRestTemplate.exchange("/products", HttpMethod.GET, null, object : ParameterizedTypeReference<List<Product>>() {})
+var response: ResponseEntity<List<Product>> = testRestTemplate.exchange("/products", HttpMethod.GET, null, object : ParameterizedTypeReference<List<Product>>() {})
+
+val products = response.body!!
 ```
 
 Create the test method and add the call listed above to it. Also add an assert to check if the first item in the list has a title with value `"iPhone X"`.
@@ -257,8 +259,12 @@ The resulting test would look something like this:
 ```kotlin
 @Test
 fun `get products endpoint should return a list of products`() {
-    val products = testRestTemplate.exchange("/products", HttpMethod.GET, null, object : ParameterizedTypeReference<List<Product>>() {}).body
-    assertThat(products.first().title).isEqualTo("iPhone X")
+val response = testRestTemplate.exchange<List<Product>>("/products", HttpMethod.GET, HttpEntity.EMPTY)
+assertThat(response.statusCode.value()).isEqualTo(200)
+
+val products = response.body!!
+assertThat(products.size).isEqualTo(4)
+assertThat(products.first().title).isEqualTo("iPhone X")
 }
 ```
 
@@ -272,7 +278,12 @@ Run the test, it should run properly and succeed (provided you built it right) :
 
 As a final exercise, let's leverage three interesting features Kotlin has to offer: Extension functions and inlining + reified generics to shorten the RestTemplate call.
 
-Spring provides out-of-the-box extension for this but we need to explicitly import such extensions.
+Spring provides out-of-the-box extension for this but we need to explicitly import such extensions. 
+
+Import org.springframework.boot.test.web.client.exchange and try to adjust the testRestTemplate.exchange call to use the extension.
+
+<details>
+<summary>Suggested solution</summary>
 
 ```kotlin
 import org.springframework.boot.test.web.client.exchange
@@ -334,6 +345,7 @@ val httpEntity = HttpEntity(body, HttpHeaders().apply { contentType = MediaType.
 val response = testRestTemplate.postForEntity<Basket>("/baskets/1/items", httpEntity)
 
 ```
+</details>
 
 ## That's it for now ##
 
