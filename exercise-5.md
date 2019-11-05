@@ -10,13 +10,13 @@ In the `src/main/test` folder the file BootiqueControllerTest should be availabl
 
 We are going to be using a mocking framework to mock out our dependencies. Spring test conveniently bundles Mockito so let's use that. First thing to do now, is to define the MockitoRunner as the testrunner for your unit test. Add it now.
 
-In java you would do something like the listing below. Define the test class and add the runner declaration to it.
+In java you would do something like the listing below. 
 
 ```java
 @RunWith(MockitoJUnitRunner.class)
 ```
 
-**Exercise** Convert the test to Kotlin and add the MockitoJUnitRunner to is.
+**Exercise** Convert the test to Kotlin and add the MockitoJUnitRunner to it.
 
 <details>
 <summary>Suggested solution</summary>
