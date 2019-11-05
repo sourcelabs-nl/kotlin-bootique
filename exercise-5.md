@@ -270,7 +270,7 @@ Run the test, it should run properly and succeed (provided you built it right) :
 
 **Exercise** Optimizing the test
 
-As a final exercise, let's leverage three interesting features Kotlin has to offer: Extension functions and reified generics to shorten the TestRestTemplate call.
+As a final exercise, let's leverage some interesting features Kotlin has to offer, extension functions and reified generics, to shorten the TestRestTemplate call.
 
 Spring provides out-of-the-box extension for this but we need to explicitly import such extensions. 
 
