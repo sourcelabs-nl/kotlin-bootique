@@ -85,24 +85,24 @@ fun getTotalPrice() = items.sumBy { it.totalPrice }
 Still there is some noise in the file caused by the constructors. We can combine the following code in the primary constructor for the class:
 
 ```kotlin
-private val orderItems: MutableList<OrderItem>
+private val items: MutableList<OrderItem>
 
 constructor() {
-    orderItems = ArrayList()
+    items = ArrayList()
 }
 
-constructor(orderItems: MutableList<OrderItem>) {
-    this.orderItems = orderItems
+constructor(items: MutableList<OrderItem>) {
+    this.items = items
 }
 ```
 
-**Exercise**: Write a primary constructor for the Basket class which has a single property orderItems: MutableList<OrderItem>. Does the code still work?
+**Exercise**: Write a primary constructor for the Basket class which has a single property items: MutableList<OrderItem>. Does the code still work?
 
 <details>
   <summary>Suggested solution:</summary>
 
 ```kotlin
-class Basket(val orderItems: MutableList<OrderItem> = mutableListOf()) 
+class Basket(val items: MutableList<OrderItem> = mutableListOf()) 
 ```
 </details>
 
