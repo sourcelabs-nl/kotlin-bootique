@@ -36,7 +36,7 @@ We are now going to define the unit we are testing and the mocks required for th
 @InjectMocks
 private BootiqueController bootiqueController;
 @Mock
-private ProductRepository mockBasketRepository;
+private BasketRepository mockBasketRepository;
 @Mock
 private ProductRepository mockProductRepository;
 ```
