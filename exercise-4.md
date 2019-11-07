@@ -62,8 +62,7 @@ fun beans() = beans {
     bean<Docket> {
         Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("com.bootique.bootique"))
                 .build()
     }
 }
@@ -105,8 +104,7 @@ class BootiqueApplication {
         bean<Docket> {
             Docket(DocumentationType.SWAGGER_2)
                     .select()
-                    .apis(RequestHandlerSelectors.any())
-                    .paths(PathSelectors.any())
+                    .apis(RequestHandlerSelectors.basePackage("com.bootique.bootique"))
                     .build()
         }
     }
@@ -151,8 +149,7 @@ fun main(args: Array<String>) {
                 bean<Docket> {
                     Docket(DocumentationType.SWAGGER_2)
                             .select()
-                            .apis(RequestHandlerSelectors.any())
-                            .paths(PathSelectors.any())
+                            .apis(RequestHandlerSelectors.basePackage("com.bootique.bootique"))
                             .build()
                 }
             }
