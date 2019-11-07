@@ -115,7 +115,7 @@ Or even more concise like this:
 val totalPrice = price * quantity
 ```
 
-Lets do this step by step! 
+Lets do this step by step but the application wont work until the end of this exercise!
 
 **Exercise:** change the totalPrice calculation to the snippet below:
 
