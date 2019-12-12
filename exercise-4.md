@@ -116,7 +116,7 @@ class BootiqueApplication {
          @JvmStatic
         fun main(args: Array<String>) {
             runApplication<BootiqueApplication>(*args) {
-                addInitializers(beans())
+                addInitializers(beans()) // Wont compile
             }
         }
     }
@@ -125,7 +125,7 @@ class BootiqueApplication {
 </details>
 <br>
 
-We could simplify this code even further. In Kotlin we dont need a class/companion object to run the application, we can move the main function to a top-level function. We can also inline the `beans()` function inside runApplication. 
+We should simplify this code even further. In Kotlin we dont need a class/companion object to run the application, we can move the main function to a top-level function. We can also inline the `beans()` function inside runApplication. 
 
 **Exercise**: Change the main to a top-level function. 
 
