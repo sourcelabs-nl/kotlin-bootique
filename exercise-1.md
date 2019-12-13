@@ -14,7 +14,7 @@ Prepare the maven pom.xml for Kotlin.
 ```xml
 <properties>
     ...
-    <kotlin.version>1.3.50</kotlin.version>
+    <kotlin.version>1.3.61</kotlin.version>
 </properties>
 ```
 
