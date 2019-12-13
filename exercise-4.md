@@ -7,7 +7,7 @@ In this exercise we will show a real world example of how to use a DSL written i
 Spring 5 provides a [Kotlin bean definition DSL](https://docs.spring.io/spring/docs/current/spring-framework-reference/languages.html#kotlin-bean-definition-dsl) to define your configuration in a different way. An example from the Spring Documentation:
 
 ```kotlin
-fun beans() = beans {
+fun dsl() = beans {
     bean<UserHandler>()
     bean<Routes>()
     bean<WebHandler>("webHandler") {
@@ -39,16 +39,16 @@ fun beans() = beans {
 Lets migrate the bean definition in the `BootiqueApplication` to the Kotlin bean definition DSL. We can do that by adding a Kotlin function that returns an instance of a `BeanDefinitionDsl`.
                                                                           
 ```kotlin
-fun beans(): BeanDefinitionDsl = beans {
+fun dsl(): BeanDefinitionDsl = beans {
     bean<T> { 
         ...instantiation
     }
 }
 ```
 
-**Exercise**: add the `beans()` function in the `BootiqueApplication` class.
+**Exercise**: add the `dsl()` function in the `BootiqueApplication` class.
 
-Now we included the `beans()` function we can migrate the existing bean definition.
+Now we included the `dsl()` function we can migrate the existing bean definition.
 
 **Exercise**: add the `@Bean fun api(): Docket` to the bean DSL and remove the `@Bean fun api(): Docket` function.
 
@@ -58,7 +58,7 @@ You are now done with the conversion to the DSL.
 <summary>Suggested solution:</summary>
 
 ```kotlin
-fun beans() = beans {
+fun dsl() = beans {
     bean<Docket> {
         Docket(DocumentationType.SWAGGER_2)
                 .select()
@@ -84,7 +84,7 @@ companion object {
 }
 ```
 
-**Exercise**: Replace the existing main implementation by the `runApplication` extension and include the `BeanDefinitionDsl` in the `addInitializers(...)`.
+**Exercise**: Replace the existing main implementation by the `runApplication` extension and include the `BeanDefinitionDsl` in the `addInitializers(...)`. Does it compile?
 
 <details>
 <summary>Suggested solution:</summary>
@@ -100,7 +100,7 @@ class BootiqueApplication {
     /**
      * Swagger2 configuration.
      */
-    fun beans() = beans {
+    fun dsl() = beans {
         bean<Docket> {
             Docket(DocumentationType.SWAGGER_2)
                     .select()
@@ -116,7 +116,7 @@ class BootiqueApplication {
          @JvmStatic
         fun main(args: Array<String>) {
             runApplication<BootiqueApplication>(*args) {
-                addInitializers(beans()) // Wont compile
+                addInitializers(dsl()) // Wont compile
             }
         }
     }
@@ -125,11 +125,11 @@ class BootiqueApplication {
 </details>
 <br>
 
-We should simplify this code even further. In Kotlin we dont need a class/companion object to run the application, we can move the main function to a top-level function. We can also inline the `beans()` function inside runApplication. 
+This was a trick question, because this wont compile. Since main is marked as @JvmStatic we cannot access the dsl() function from a static context. In Kotlin we dont need a class/companion object to run the application, we can move the main function to a top-level function. Optionally we can also inline the `dsl()` function inside runApplication. 
 
 **Exercise**: Change the main to a top-level function. 
 
-**Exercise**: Inline the body of `fun beans()` inside of the `runApplication { ... }` block
+**Exercise**: Inline the body of `fun dsl()` inside of the `runApplication { ... }` block
 
 <details>
 <summary>Suggested solution:</summary>
