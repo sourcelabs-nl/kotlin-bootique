@@ -10,13 +10,29 @@ In the `src/main/test` folder the file BootiqueControllerTest should be availabl
 
 We are going to be using a mocking framework to mock out our dependencies. Spring test conveniently bundles Mockito so let's use that. First thing to do now, is to define the MockitoRunner as the testrunner for your unit test. Add it now.
 
-In java you would do something like the listing below. 
+In java you would do something like the listing below.
+
+For JUnit 4 
 
 ```java
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.junit.MockitoJUnitRunner
+
 @RunWith(MockitoJUnitRunner.class)
 ```
 
-**Exercise**: Convert the test to Kotlin and add the MockitoJUnitRunner to it.
+For JUnit 5
+
+```java
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.junit.jupiter.MockitoExtension
+
+@ExtendWith(MockitoExtension::class)
+```
+
+**Exercise**: Convert the test to Kotlin and add Mockito to it.
 
 <details>
 <summary>Suggested solution</summary>
@@ -92,12 +108,9 @@ public void testRetrieveBasket() {
 
 ```
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.*
-import org.mockito.junit.MockitoJUnitRunner
 ```
 
 <details>
@@ -177,7 +190,17 @@ We are going to test the app by calling an endpoint, so we'll be modifying the t
 
 First, we'll need to configure the web environment to test against. Modify the `@SpringBootTest` annotation like below.
 
+For JUnit 4
+
 ```java
+@RunWith(SpringRunner::class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+```
+
+For JUnit 5
+
+```java
+@ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 ```
 
