@@ -8,15 +8,16 @@ This project uses maven for building the application, for gradle projects the sa
 
 Prepare the maven pom.xml for Kotlin. 
  
-**Exercise**: add the `<kotlin.version>` maven property to the pom.xml. We will use this property to define the version of Kotlin dependencies used in this project.
-
+**Exercise**: add the `<kotlin.version>` and `<kotlin.compiler.incremental>true</kotlin.compiler.incremental>` maven property to the pom.xml. We will use this property to define the version of Kotlin dependencies used in this project.
 
 ```xml
 <properties>
-    ...
     <kotlin.version>1.5.0</kotlin.version>
+    <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
+    ...
 </properties>
 ```
+By adding `<kotlin.compiler.incremental>true</kotlin.compiler.incremental>` we instruct the compiler to use incremental compilation. Note that we still need to add the compiler to the pom!
 
 **Exercise**: Add the following [Kotlin dependencies](https://kotlinlang.org/docs/reference/using-maven.html) to the pom.xml and use the jdk8 version of the [kotlin stdlib](https://kotlinlang.org/api/latest/jvm/stdlib/index.html). 
 
@@ -62,13 +63,6 @@ Just like with Java, you need to configure a maven plugin for the compilation of
             </goals>
         </execution>
     </executions>
-    <dependencies>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-maven-allopen</artifactId>
-            <version>${kotlin.version}</version>
-        </dependency>
-    </dependencies>
 </plugin>
 ```
 
@@ -129,6 +123,12 @@ Add the following configuration to the kotlin-maven-plugin, just after: `<versio
 
 ```xml
 ...
+<configuration>
+    <compilerPlugins>
+        <plugin>spring</plugin>
+    </compilerPlugins>
+    <jvmTarget>11</jvmTarget>
+</configuration>
 <dependencies>
     <dependency>
         <groupId>org.jetbrains.kotlin</groupId>
@@ -136,12 +136,6 @@ Add the following configuration to the kotlin-maven-plugin, just after: `<versio
         <version>${kotlin.version}</version>
     </dependency>
 </dependencies>
-<configuration>
-    <compilerPlugins>
-        <plugin>spring</plugin>
-    </compilerPlugins>
-    <jvmTarget>11</jvmTarget>
-</configuration>
 ...
 ```
 </details>
