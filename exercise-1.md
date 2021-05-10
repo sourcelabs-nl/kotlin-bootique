@@ -14,7 +14,7 @@ Prepare the maven pom.xml for Kotlin.
 ```xml
 <properties>
     ...
-    <kotlin.version>1.3.61</kotlin.version>
+    <kotlin.version>1.5.0</kotlin.version>
 </properties>
 ```
 
@@ -86,7 +86,7 @@ Let's convert some Java code to Kotlin, we can start with the BootiqueApplicatio
 
 You should see an error in the tests. The BootiqueApplicationTests tries to bootstrap the Spring Boot application but fails with the following error:
 ```
-org.springframework.beans.factory.parsing.BeanDefinitionParsingException: 
+Caused by: org.springframework.beans.factory.parsing.BeanDefinitionParsingException: 
 Configuration problem: @Configuration class 'BootiqueApplication' may not be final. 
 Remove the final modifier to continue.
 Offending resource: com.bootique.bootique.BootiqueApplication
@@ -133,7 +133,7 @@ Add the following configuration to the kotlin-maven-plugin, just after: `<versio
     <compilerPlugins>
         <plugin>spring</plugin>
     </compilerPlugins>
-    <jvmTarget>1.8</jvmTarget>
+    <jvmTarget>11</jvmTarget>
 </configuration>
 ...
 ```
