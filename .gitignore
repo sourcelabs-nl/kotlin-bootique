@@ -11,9 +11,12 @@ target/
 
 ### IntelliJ IDEA ###
 .idea
+.idea/httpRequests/
 *.iws
 *.iml
 *.ipr
+*.log
+
 
 ### NetBeans ###
 nbproject/private/
