@@ -129,6 +129,13 @@ Add the following configuration to the kotlin-maven-plugin, just after: `<versio
 
 ```xml
 ...
+<dependencies>
+    <dependency>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-maven-allopen</artifactId>
+        <version>${kotlin.version}</version>
+    </dependency>
+</dependencies>
 <configuration>
     <compilerPlugins>
         <plugin>spring</plugin>

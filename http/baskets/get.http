@@ -1,0 +1,5 @@
+# curl -X GET http://localhost:8080/baskets/1
+GET http://localhost:8080/baskets/1
+
+###
+

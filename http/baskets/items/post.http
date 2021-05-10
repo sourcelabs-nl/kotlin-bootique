@@ -1,0 +1,11 @@
+# curl -H "Content-Type: application/json" -X POST -d '{"productId":"1","quantity":2}' http://localhost:8080/baskets/1/items
+POST http://localhost:8080/baskets/1/items
+Content-Type: application/json
+
+{
+  "productId": "1",
+  "quantity": 2
+}
+
+###
+
