@@ -16,7 +16,7 @@ Open `OrderItem.java`.
 
 **Exercise**: convert OrderItem.java to Kotlin using IntelliJ _menu > Code > Convert Java File to Kotlin File_. 
 
-The outcome of the conversion is far from optimal, because of the Java class being a bit more complex. We can do better! 
+The outcome of the conversion is far from optimal, because of the Java class being a (little) bit more complex. We can do better! 
 
 Let get rid of the `equals()`, `hashCode()` and `toString()` boiler-plate. Kotlin has a feature for that: [data classes](https://kotlinlang.org/docs/reference/data-classes.html). Lets do this step by step.
 
@@ -26,21 +26,24 @@ With data classes we get the `equals()`, `hashCode()` and `toString()` functions
  
 **Exercise**: remove the `equals()`, `hashCode()` and `toString()` functions.
 
-In the converted code we ended up with a [constructor](https://kotlinlang.org/docs/reference/classes.html#constructors) on class level called the primary constructor, and next to that the secondary constructor.
+In the converted code we ended up with a primary [constructor](https://kotlinlang.org/docs/reference/classes.html#constructors) and next to that a secondary constructor.
 
-In many situations we can get rid of the duplicate constructors by merging the [constructors](https://kotlinlang.org/docs/reference/classes.html#constructors) into a single primary constructor.
+In many situations we can get rid of the generated duplicate constructors by merging the [constructors](https://kotlinlang.org/docs/reference/classes.html#constructors) into a single primary constructor by providing default values for some of the constructor arguments.
  
-Notice that the `productId` argument in the two constructors are different, one which is the non-nullable `val productId: String` and the other which is nullable `val productId: String?`. Since productId should be a mandatory field, we will use the null safe version in the next exercise.
+Notice that the `productId` and `price` arguments in the two constructors are of the nullable type String.  
  
-**Exercise**: merge the two constructors into primary constructor but *don't remove* the `@JsonCreator` and `@JsonProperty` annotations. Hint, the constructor keyword on class level is mandatory when you want to use annotations on the primary constructor.
+**Exercise**: merge the two constructors into primary constructor but *don't remove* the `@JsonCreator` and `@JsonProperty` annotations. Hint, you can also use the constructor keyword on class level when you want to use annotations on the primary constructor just yet. Make all arguments non-nullable and don't provide a default value.
 
 <details>
   <summary>Suggested solution:</summary>
   
 ```kotlin
-data class OrderItem @JsonCreator constructor(@JsonProperty("productId") val productId: String, 
-                                              @JsonProperty("quantity") val quantity: Int, 
-                                              val price: BigDecimal) {
+data class OrderItem @JsonCreator constructor(
+    @JsonProperty("productId") val productId: String,
+    @JsonProperty("quantity") val quantity: Int,
+    val price: BigDecimal
+) {
+
     val totalPrice: BigDecimal
         get() = price.multiply(BigDecimal(quantity))
 }
@@ -72,9 +75,9 @@ for JSON property price due to missing (therefore NULL) value for creator parame
 at [Source: (PushbackInputStream); line: 1, column: 30] (through reference chain: com.bootique.bootique.OrderItem["price"])
 ```
 
-In the POST body we send only two fields `{"productId":"1","quantity":2}` for an OrderItem, these fields are directly mapped onto the OrderItem class. This used to work when there were two constructors, but after the merge we ended up with a single constructor which requires 3 non-nullable (mandatory) parameters. 
+In the POST body we send only two fields `{"productId":"1","quantity":2}` for an OrderItem, these fields are directly mapped onto the OrderItem class. This used to work when there were two constructors, but after the merge we ended up with a single constructor which requires 3 non-nullable (mandatory) arguments. 
 
-How can we fix this with Kotlin? First lets try to make the price field (optional) nullable and add the ? after the BigDecimal type. You will probable notice that the totalPrice calculation is now also giving you a hard time. Price can now be nullable therefore we need to add null safety checks using the ? operator in the totalPrice calculation, see the snippet below:
+How can we fix this with Kotlin? First lets try to make the price field nullable and add the question mark to the BigDecimal type. The totalPrice calculation uses the price property and should handle the value being null by adding the null-safe operator (?.) to the totalPrice calculation, like in the snippet below:
   
 ```kotlin
 data class OrderItem @JsonCreator constructor(@JsonProperty("productId") val productId: String, 
@@ -85,7 +88,8 @@ data class OrderItem @JsonCreator constructor(@JsonProperty("productId") val pro
 }
 ```
 
-A better approach would be to avoid having to deal with null values all together so that way we don't have to worry about potential NPEs. We can do this by providing a default value for the price argument. This way we dont have to explicitly provide a value, but it will never be null. In the Java version price was assigned the value of BigDecimal.ZERO, use that here as well. 
+A much better approach would be to avoid having to deal with null values all together and not having to worry about potential NPEs. 
+We can do this by providing a default value for the price argument. This way we can construct the OrderItem without explicitly providing a value for price, but it will never be null. In the Java version price was assigned the value of BigDecimal.ZERO, use that here as well. 
 
 **Exercise**: assign a default value, BigDecimal.ZERO to the price argument.
 
@@ -97,43 +101,41 @@ data class OrderItem @JsonCreator constructor(@JsonProperty("productId") val pro
                                               @JsonProperty("quantity") val quantity: Int, 
                                               val price: BigDecimal = BigDecimal.ZERO) {
     val totalPrice: BigDecimal
-        get() = price.multiply(BigDecimal(quantity)) // evaluated every time we access the totalPrice property or call getTotalPrice() from Java.
+        get() = price.multiply(BigDecimal(quantity)) 
 }
 ```
 </details>
 <br>
 
-In the code snippet above the constructor arguments are val, immutable, which means after assignment the value cannot be changed. The `val totalPrice` is calculated based in these immutable properties, because of this we can simplify the code and write the totalPrice calculation as an expression. Would it not be nice if we could write it like:
+In the code snippet above the constructor arguments are all immutable now, which means that after initialization their values cannot be changed. 
+
+The `val totalPrice` which is called a property in Kotlin, calculates the totalPrice based on two immutable properties (price and quantity). Since both properties are `vals` (immutable) we can get rid of the get() method on the property. Getters on properties are useful when the expression needs to be evaluated every time the property is accessed.  
+
+But the solutin is not yet the idiomatic Kotlin way of writing code, because it would be even nicer if we could write it like:
 
 ```kotlin
 val totalPrice: BigDecimal = price * quantity
 ```
 
-Or even more concise like this:
+Lets do this step by step (complete all the exercises before restarting the application).
 
-```kotlin
-val totalPrice = price * quantity
-```
-
-Lets do this step by step but the application wont work until the end of this exercise!
-
-**Exercise:** change the totalPrice calculation to the snippet below:
+**Exercise:** instead of multiply use the times operator and change the totalPrice calculation to the snippet below:
 
 ```kotlin
 val totalPrice: BigDecimal = price * BigDecimal(quantity)
 ```
 
-This is not yet how we want to write the expression because we still have to wrap the quantity in a BigDecimal in order to be able to do calculations with BigDecimal. Notice that in Java this way of doing calculations on BigDecimals would not be possible!
+We still need to wrap the quantity property in a BigDecimal in order to be able to do calculations with BigDecimal instances.
 
-The Kotlin stdlib includes [overloaded operators](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/java.math.-big-decimal/index.html) for Java types like java.math.BigDecimal, this allows use the * (times) operator on BigDecimal. 
+Note that performing these kinds of calculations with BigDecimals is not possible in Java since it does not support operator overloading! In Kotlin this is possible, but limited to a few predefined operators only. The Kotlin stdlib includes [overloaded operators](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/java.math.-big-decimal/index.html) for Java types like java.math.BigDecimal, this allows use the * (times) operator on BigDecimal. 
 
-Have a look at the signature for times operator on `java.math.BigDecimal`. 
+Now have a look at the signature for times operator on `java.math.BigDecimal` in IntelliJ (Cmd+Click). 
 
 ```kotlin
 public operator inline fun java.math.BigDecimal.times(other: java.math.BigDecimal): java.math.BigDecimal
 ```
 
-Note that `price * BigDecimal(quantity)` under the hood is exactly the same as `price.times(BigDecimal(quantity))`, this is just syntactic sugar. 
+Note that `price * BigDecimal(quantity)` under the hood is identical to `price.times(BigDecimal(quantity))`, consider it to be syntactic sugar. 
 
 What we want is being able to invoke the times function with a Int argument so that we do not need to wrap our Int in a BigDecimal. We can implement our own overloaded operator, similar to the one in the Kotlin stdlib. 
 
@@ -148,27 +150,26 @@ operator fun BigDecimal.times(quantity: Int) = this.times(BigDecimal(quantity))
 </details>
 <br>
 
-You can group these custom extensions like overloaded operators in a Kotlin files, so that they are easily recognizable and can be shared and reused in other parts of the code.
+You can add the overloaded operator to the Kotlin file from which you are using it, but you can also group extensions and overloaded operators in a separate Kotlin file so that they are easily recognizable and can be shared and reused in other parts of the code.
 
 ### Polishing the code
 
-This application communicates over HTTP using JSON, as you have seen in Swagger or in the curl command in the README.md. The JSON (de)serialization in this application is handled by the Jackson library, the spring-boot-starter-web (Spring Boot 2!) dependency pulls in the Jackson dependencies for us.
+This application communicates via JSON over HTTP, as you have seen in Swagger or in the curl command in the README.md. The JSON (de)serialization in this application is handled by the Jackson library, the spring-boot-starter-web (Spring Boot 2!) dependency pulls in the Jackson dependencies for us.
 
 In the BasketController the JSON data is mapped from the POST data directly on the OrderItem class. As you can see, in the OrderItem class we are instructing the Jackson library, with the `@JsonCreator` and `@JsonProperty`, how to map the JSON data to our Java (or Kotlin) class. 
 
-Reason for having the `@JsonProperty` annotation is that when compiling Java code, the parameter names of the constructor parameters are lost, so Jackson does not know how to map the json properties to the OrderItem class. In Kotlin, constructor parameter names are preserved when compiling code. We can therefore get rid of the  `@JsonProperty` annotations. 
+Reason for having the `@JsonProperty` annotation is that when compiling Java code, the parameter names in the constructor are lost, Jackson does not know how to map the json properties to the OrderItem class. In Kotlin, parameter names are preserved when compiling the code and stores as meta data. We can therefore get rid of the  `@JsonProperty` annotations. As a bonus feature, the Jackson library also allows us to omit the `@JsonCreator` annotation when using Kotlin. 
 
-As a bonus feature, the Jackson library also allows us to omit the `@JsonCreator` annotation when using Kotlin, these features are provided by the `jackson-kotlin-module`. This dependency needs to be explicitly added to the project pom.xml!
+This functionality is provided by the `jackson-kotlin-module`. This dependency needs to be added explicitly to the maven pom.xml!
 
-When we don't have any annotations on the class definition we can omit the constructor keyword as well.
+Once we have no `@JsonCreator` annotations on the `OrderItem` class we can omit the Kotlin constructor keyword as well.
 
-**Exercise**: add the `jackson-module-kotlin` to the maven `pom.xml` (note that `${jackson.version}` is defined by Spring Boot)
+**Exercise**: add the `jackson-module-kotlin` to the maven `pom.xml` (note that the version of this module is [managed by Spring Boot](https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html)).
 
 ```xml
 <dependency>
     <groupId>com.fasterxml.jackson.module</groupId>
     <artifactId>jackson-module-kotlin</artifactId>
-    <version>${jackson.version}</version>
 </dependency>
 ```
 

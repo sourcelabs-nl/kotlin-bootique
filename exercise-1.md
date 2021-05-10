@@ -8,7 +8,7 @@ This project uses maven for building the application, for gradle projects the sa
 
 Prepare the maven pom.xml for Kotlin. 
  
-**Exercise**: add the `<kotlin.version>` and `<kotlin.compiler.incremental>true</kotlin.compiler.incremental>` maven property to the pom.xml. We will use this property to define the version of Kotlin dependencies used in this project.
+**Exercise**: add the `<kotlin.version>` and `<kotlin.compiler.incremental>true</kotlin.compiler.incremental>` properties to the maven pom.xml. We will use this property to define the version of Kotlin dependencies used in this project.
 
 ```xml
 <properties>
@@ -34,7 +34,7 @@ By adding `<kotlin.compiler.incremental>true</kotlin.compiler.incremental>` we i
 </dependency>
 ```
 
-You project is now ready to use the Kotlin standard library and reflection utilities which are used by frameworks like Jackson.
+You project is now ready to use the Kotlin standard library and reflection utilities which are used by frameworks like Spring Boot and Jackson.
 
 ### Add the Kotlin maven plugin
 
