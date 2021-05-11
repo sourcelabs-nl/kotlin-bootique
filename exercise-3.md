@@ -8,27 +8,32 @@ Open `Basket.java`
 
 **Exercise**: convert `Basket.java` to Kotlin using IntelliJ (_menu > Code > Convert Java File to Kotlin File_). 
 
-After the conversion the code is broken, just take a look at the totalPrice calculation. Apparently IntelliJ is not able to figure out all the Java Stream API operations and tries to make the best out of it. 
+After the conversion the code is still far from optimal. The Java2kotlin converter still uses the Java Stream API and tries to make the best out of it. 
 
-We can fix this by writing the calculation in exactly the same way as we would do with the Java Stream API:
+We can clean it up a bit by writing the calculation in exactly the same way as we would do with the Java Stream API. 
+
+Kotlin also has a build in reduce function in the std lib, so we can use that instead of the Java Stream API.
 
 ```kotlin
-val totalPrice: BigDecimal        
-    get() = items.stream().map(OrderItem::totalPrice).reduce(BigDecimal.ZERO, BigDecimal::add)
+val totalPrice: BigDecimal
+    get() = items.map(OrderItem::totalPrice).reduce { acc, next -> acc + next }
 ```
 
 **Exercise:** change the calculation to the snippet above
 
-Kotlin has a richer (functional) API which allows us write this in a different way without using the Java Stream API, for example we could achieve the same using the fold function:
+There are a few problems with this code. First, the map operation produces a new list as its result on which the reduce operation is performed while we actually don't even use this list anywhere else. 
+Our newly introduced reduce does not work on an empty collection. Even though the code compiles, it is effectively broken. 
+
+We could better use fold here, as it will return the provided default value whenever we try to reduce an empty collection. We can also directly call fold on the items without the intermediate map operation. 
 
 ```kotlin
 val totalPrice: BigDecimal 
-    get() = items.fold(BigDecimal.ZERO, { sum, item -> sum.plus(item.totalPrice) })
+    get() = items.fold(BigDecimal.ZERO, { acc, next -> acc.plus(next.totalPrice) })
 ```
 
 **Exercise:** change the calculation to the snippet above
 
-You could argue if the above is more concise than the Java Stream API version. A more concise way of writing this would be:
+You could argue if the above is more concise than the Java Stream API version. A more idiomatic way of writing this would be:
 
 ```kotlin
 val totalPrice: BigDecimal 
@@ -42,27 +47,20 @@ val totalPrice: BigDecimal
     get() = items.sumBy { it.totalPrice }
 ```
 
-Kotlin already has build-in functions to sum Int and Double types but not for BigDecimal:
+Kotlin already has build-in functions to sum types:
 
 ```kotlin
-public inline fun <T> Iterable<T>.sumBy(selector: (T) -> Int): Int 
-
-public inline fun <T> Iterable<T>.sumByDouble(selector: (T) -> Double): Double
+public inline fun <T> Iterable<T>.sumOf(selector: (T) -> java.math.BigDecimal): java.math.BigDecimal
 ```
 
-**Exercise**: write an extension function which allows for summing BigDecimals. Hint: look at the implementation of `public inline fun <T> Iterable<T>.sumBy(selector: (T) -> Int): Int` above
+**Exercise**: Adjust the code to use the build-in sumOf() function.
 
 <details>
   <summary>Suggested solution:</summary>
   
 ```kotlin
-fun <T> Iterable<T>.sumBy(selector: (T) -> BigDecimal): BigDecimal {
-    var sum = BigDecimal.ZERO
-    for (element in this) {
-        sum += selector(element)
-    }
-    return sum
-}
+val totalPrice: BigDecimal
+    get() = items.sumOf { it.totalPrice }
 ```
 </details>
 <br>
@@ -77,7 +75,7 @@ Kotlin encourages you to use the [property syntax](https://kotlinlang.org/docs/r
   <summary>Suggested solution:</summary>
 
 ```kotlin
-fun getTotalPrice() = items.sumBy { it.totalPrice }
+fun getTotalPrice() = items.sumOf { it.totalPrice }
 ```
 </details>
 <br>
@@ -96,13 +94,20 @@ constructor(items: MutableList<OrderItem>) {
 }
 ```
 
-**Exercise**: Write a primary constructor for the Basket class which has a single property items: MutableList<OrderItem>. Does the code still work?
+**Exercise**: Write a primary constructor for the Basket class and combine the constructors into one property items: MutableList<OrderItem>. Does the code still work?
 
 <details>
   <summary>Suggested solution:</summary>
 
 ```kotlin
-class Basket(val items: MutableList<OrderItem> = mutableListOf()) 
+class Basket(private val items: MutableList<OrderItem> = mutableListOf()) {
+
+    fun getItems(): List<OrderItem> = items.toList()
+
+    fun addOrderItem(orderItem: OrderItem) = items.add(orderItem)
+
+    fun getTotalPrice(): BigDecimal = items.sumOf { it.totalPrice }
+} 
 ```
 </details>
 
@@ -113,11 +118,7 @@ Open `BasketRepository.java`
 
 **Exercise**: convert `BasketRepository.java` to Kotlin using IntelliJ (_menu > Code > Convert Java File to Kotlin File_). 
 
-Two interesting things about the converted code. First have a look at the getBasketById(), there is some explicit casting into a Map.
-
-**Exercise**: remove the cast to `java.util.Map<String, Basket>`
-
-See if you can find a method in the Kotlin standard library (`kotlin.collections`) which could serve as a nice replacement for `computeIfAbsent`.
+First have a look at the `getBasketById()`, it uses `computeIfAbsent`. See if you can find a method in the Kotlin standard library (`kotlin.collections`) which could serve as a nice replacement for `computeIfAbsent`.
 
 **Exercise**: replace `computeIfAbsent` by a more concise Kotlin alternative
 
@@ -127,12 +128,12 @@ See if you can find a method in the Kotlin standard library (`kotlin.collections
 ```kotlin
 fun getBasketById(id: String): Basket = baskets.getOrPut(id) { Basket() }
 ```
-
-Or without the use of type inference:
+Or 
 
 ```kotlin
-fun getBasketById(id: String) = baskets.getOrPut(id) { Basket() }
+fun getBasketById(id: String): Basket = baskets.getOrDefault(id, Basket())
 ```
+
 </details>
 <br>
 
@@ -144,7 +145,7 @@ companion object {
 }
 ```
 
-The original Java code defined baskets as static but [Kotlin does not support the static keyword](https://discuss.kotlinlang.org/t/what-is-the-advantage-of-companion-object-vs-static-keyword/4034). You can use companion object instead which is like a singleton Object associated with a certain class. Alternatively you could define `private val baskets = ConcurrentHashMap<String, Basket>()` outside of the class which has the same semantics as static in Java.
+The original Java code defined the baskets variable as static but [Kotlin does not support the static keyword](https://discuss.kotlinlang.org/t/what-is-the-advantage-of-companion-object-vs-static-keyword/4034). You can use companion object instead which is like a singleton Object associated with a certain class. Alternatively you could define `private val baskets = ConcurrentHashMap<String, Basket>()` outside of the class which has the same semantics as static in Java.
 
 ### Convert ProductRepository.java to Kotlin
 
@@ -152,52 +153,49 @@ Open `ProductRepository.java`
 
 **Exercise**: convert `ProductRepository.java` to Kotlin using IntelliJ (_menu > Code > Convert Java File to Kotlin File_). 
 
-You will notice that getProductById() is broken, this is because the expected return can actually be null but the method defines a NonNullable return type: Product. The implementation might return a null value when the product cannot be found.
+After converting to Kotlin it is arguable that the Kotlin versions looks cleaner than its Java counterpart. Let's try to improve this.
 
-**Exercise**: change the return type of `fun getProductById()` that it allows for a returning nullable Product.
+Instead of the `getProducts()` function we ended up with a property called `products`. While this might be the preferred way in Kotlin, it does not look pretty here. Let's convert it back to a function.
+
+**Exercise**: change the property `products` to a function `fun getProducts()` with only an expression body. While doing so, remove the copyOf wrapper and use Kotlin's `toList` function.
 
 <details>
 <summary>Suggested solution:</summary>
 
 ```kotlin
-fun getProductById(productId: String): Product? {
-    return products[productId]
-}
+fun getProducts(): List<Product> = Companion.products.values.toList()
 ```
 </details>
-<br>
 
-If the Java code would have looked like the snippet below, with the `@Nullable`, the conversion would have succeeded:
-
-```java
-@Nullable
-public Product getProductById(String productId) {
-    return products.get(productId);
-}
-```
+By changing the code we got rid of the name clash between the property `products` in the ProductRepository and the companion object field called `products`. We can remove the `Companion.` prefix from the `getProductById` and `getProducts` function body.
 
 Lets work a bit on the concise syntax.
 
-**Exercise**: rewrite the function `fun getProductById()` as an single expression function.
+**Exercise**: rewrite the function body `fun getProductById()` into an expression.
 
 <details>
 <summary>Suggested solution:</summary>
 
 ```kotlin
-fun getProductById(productId: String) = products[productId]
+fun getProductById(productId: String): Product? = products[productId]
 ```
 </details>
 <br>
 
-The implementation of `fun getProducts(): List<Product>` was translated from Java, but we can improve this the Kotlin way. The idea behind the Java implementation was to always return an immutable List of Products so that it can never be modified outside of the class. In Kotlin we can return the products.values and convert that to a List, which is immutable by default.
+Last but not least, use the Kotlin version of `Map.of` which is `mapOf()` instead.
 
-**Exercise**: Change `fun getProducts(): List<Product>` in a way that it returns products.values as a Kotlin (immutable) List 
+**Exercise**: rewrite `Map.of` to `mapOf()`.
 
 <details>
 <summary>Suggested solution:</summary>
 
 ```kotlin
-fun getProducts() = products.values.toList()
+private val products = mapOf(
+    "1" to Product("1", "iPhone XX", "Apple", BigDecimal("3989.99")),
+    "2" to Product("2", "Galaxy S25", "Samsung", BigDecimal("2699.99")),
+    "3" to Product("3", "3310", "Nokia", BigDecimal("19.95")),
+    "4" to Product("4", "Kermit", "KPN", BigDecimal("6.95"))
+)
 ```
 </details>
 <br>
@@ -208,53 +206,47 @@ Open `BootiqueController.java`
 
 **Exercise**: convert `BootiqueController.java` to Kotlin using IntelliJ (_menu > Code > Convert Java File to Kotlin File_). 
 
-The resulting code looks pretty ok.
+If there are any issues with the imports, then remove the unused failing imports.
 
-**Exercise**: Rewrite the functions to single expression functions if possible.
+**Exercise**: Rewrite the controller methods to expression functions if possible.
 
-The `addToBasket()` function can still be improved. What if we are not able to find the product for the given productId? The converted code will throw a Kotlin NullPointException because of the !! in `productById!!.listPrice`. A potential fix would be to properly check if we got result from `productRepository.getProductById(orderItem.productId)`.
+One thing to notice is the `getBasket` method signature:
 
-**Exercise**: Add a null check for non existing products and throw an RuntimeException if not found.
+```kotlin
+fun getBasket(@PathVariable("id") id: String?): Basket = basketRepository.getBasketById(id!!)
+```
+
+While `@PathVariable` is required by default, the id argument is nullable here. This is because it was converted from Java and there was no information available for the converter (@NotNull annotation) to set it to not null.
+
+**Exercise**: Change the `id` argument to the non-nullable type String and in the expression body remove the non-null assertion. Do the same for `addToBasket()`.
+
+In `addToBasket` we can also handle the case where we try to add a non-existing product to our basket a bit better. 
+
+**Exercise**: Add a null check for non-existing products and throw an ResponseStatusException() if not found.
 
 <details>
 <summary>The resulting code should look like this:</summary>
 
 ```kotlin
-    @PostMapping(path = arrayOf("/baskets/{id}/items"), consumes = [MediaType.APPLICATION_JSON_VALUE])
-    fun addToBasket(@PathVariable("id") id: String, @RequestBody orderItem: OrderItem): Basket {
-        val productById = productRepository.getProductById(orderItem.productId) ?:
-                throw RuntimeException("Product with productId: ${orderItem.productId} not found!")
-        val basket = basketRepository.getBasketById(id)
-        basket.addOrderItem(OrderItem(orderItem.productId, orderItem.quantity, productById.listPrice))
-        return basket
-    }
+@PostMapping(path = ["/baskets/{id}/items"], consumes = [MediaType.APPLICATION_JSON_VALUE])
+fun addToBasket(@PathVariable("id") id: String, @RequestBody orderItem: OrderItem): Basket {
+    val productById = productRepository.getProductById(orderItem.productId)
+        ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Product with id: ${orderItem.productId} not found.")
+    val basket = basketRepository.getBasketById(id)
+    basket.addOrderItem(orderItem.copy(price = productById.listPrice))
+    return basket
+}
 ```
 </details>
 <br>
 
-**Exercise**: We could polish the addToBasket function a bit more by removing the need to define the intermediate `val basket`. We can do this by directly calling the the [apply](https://dzone.com/articles/examining-kotlins-also-apply-let-run-and-with-intentions) function on `basketRepository.getBasketById(id)`. It would also be better to invoke `productRepository.getProductById()` inside the apply {} instead of before.
+Last but not least we have the BootiqueApplicationTests class. Once this test class has been converted we could get rid of the Java compiler if needed.
 
-<details>
-<summary>Suggested solution:</summary>
-
-```kotlin
-    @PostMapping(path = ["/baskets/{id}/items"], consumes = [MediaType.APPLICATION_JSON_VALUE])
-    fun addToBasket(@PathVariable id: String, @RequestBody orderItem: OrderItem): Basket {
-        return basketRepository.getBasketById(id).apply {
-            val product = productRepository.getProductById(orderItem.productId)
-                    ?: throw RuntimeException("Product with productId: ${orderItem.productId} not found!")
-            addOrderItem(OrderItem(orderItem.productId, orderItem.quantity, product.listPrice))
-        }
-    }
-```
-</details>
-<br>
-
-**Exercise**: Build and test your application if it is still working as expected.
+**Exercise**: Convert BootiqueApplicationTests to Kotlin. Build the application and verify everything is still working as expected.
 
 ### Next steps
 
-You have now successfully converted all of the Java code to Kotlin! 
+You have now successfully converted all the Java application code to Kotlin! 
 
 Continue with [exercise-4](exercise-4.md):
 
