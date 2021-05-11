@@ -85,7 +85,7 @@ You can launch the BootiqueApplication by running the project using the spring-b
 
 The Kotlin Bootique application exposes a Swagger endpoint that allows you to explore the API: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
-Alternatively you can also execute all the request against the API using the provided HTTP Request files in the /http folder or using curl. 
+Alternatively you can also execute request inside IntelliJ against the API using the provided [HTTP Request files](./http) in the [/http](./http) folder or using curl. 
 
 #### Products
 
