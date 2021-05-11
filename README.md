@@ -24,7 +24,7 @@ Download and install git from [https://git-scm.com/downloads](https://git-scm.co
 
 #### Java
 
-Make sure you have at least JDK 8 or 11 installed. You can check which version is installed by executing in your terminal:
+Make sure you have at least JDK 11 installed. You can check which version is installed by executing in your terminal:
 
 ```
 java -version
