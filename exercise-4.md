@@ -129,6 +129,8 @@ This was a trick question, because this wont compile. Since main is marked as @J
 
 **Exercise**: Change the main to a top-level function. 
 
+We can define the `fun dsl()` as a top-level function, but we can also inline the body into the `runApplication` code.
+
 **Exercise**: Inline the body of `fun dsl()` inside of the `runApplication { ... }` block
 
 <details>
@@ -148,9 +150,9 @@ fun main(args: Array<String>) {
             beans {
                 bean<Docket> {
                     Docket(DocumentationType.SWAGGER_2)
-                            .select()
-                            .apis(RequestHandlerSelectors.basePackage("com.bootique.bootique"))
-                            .build()
+                        .select()
+                        .apis(RequestHandlerSelectors.basePackage("com.bootique.bootique"))
+                        .build()
                 }
             }
         )

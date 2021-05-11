@@ -75,7 +75,7 @@ _mvnw_ is no typo, this makes sure you are using the maven wrapper file. If you 
 
 ### Run the application
 
-You can launch the Kotlin Bootique application by running the project using the spring-boot maven plugin. Execute the following maven command:
+You can launch the BootiqueApplication by running the project using the spring-boot maven plugin. Execute the following maven command:
 
 ```
 ./mvnw spring-boot:run
@@ -85,7 +85,7 @@ You can launch the Kotlin Bootique application by running the project using the 
 
 The Kotlin Bootique application exposes a Swagger endpoint that allows you to explore the API: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
-Alternatively you can also execute all the request against the API using curl or Postman (or a browser for all the GET requests). 
+Alternatively you can also execute all the request against the API using the provided HTTP Request files in the /http folder or using curl. 
 
 #### Products
 

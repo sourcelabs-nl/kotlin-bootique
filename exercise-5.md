@@ -8,23 +8,9 @@ Let's start out by finally adding a simple unit test. Normally of course we woul
 
 In the `src/main/test` folder the file BootiqueControllerTest should be available. It has no contents yet, this is left for you to provide.
 
-We are going to be using a mocking framework to mock out our dependencies. Spring test conveniently bundles Mockito so let's use that. First thing to do now, is to define the MockitoRunner as the testrunner for your unit test. Add it now.
+We are going to be using a mocking framework to mock our dependencies. Spring Boot conveniently bundles Mockito so let's use that. First thing to do now, is to add the MockitoExtension to the test class. This would look something like the listing below.
 
-In java you would do something like the listing below.
-
-For JUnit 4 
-
-```java
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
-
-@RunWith(MockitoJUnitRunner.class)
-```
-
-For JUnit 5
-
-```java
+```kotlin
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
@@ -32,19 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension
 @ExtendWith(MockitoExtension::class)
 ```
 
-**Exercise**: Convert the test to Kotlin and add Mockito to it.
-
-<details>
-<summary>Suggested solution</summary>
-
-In Kotlin we can refer to classes with the double colon notation: `MockitoJUnitRunner::class`
-
-```kotlin
-@RunWith(MockitoJUnitRunner::class)
-class BootiqueControllerTest
-```
-</details>
-<br>
+**Exercise**: Add Mockito to the BootiqueControllerTest class.
 
 We are now going to define the unit we are testing and the mocks required for this test. In Java, using mockito you could end up with something similar to the listing below.
 
@@ -169,38 +143,24 @@ whenever(mockBasketRepository.getBasketById(basketId)).thenReturn(basket)
 
 You can also add a useful library to your codebase named [mockito-kotlin](https://github.com/nhaarman/mockito-kotlin) library which enables you to use mockito `when()` as `whenever()` but also is able to handle scenarios where non nullable arguments need to be mocked. It just adds some simple syntactic sugar to Mockito anywhere it makes sense to do so to improve the way Mockito and Kotlin integrate.
 
-**Exercise**: Add mockito-kotlin dependency to your pom.xml and replace the whenever function with the one from the library (com.nhaarman.mockitokotlin2.whenever).
+**Exercise**: Add mockito-kotlin dependency to your pom.xml and replace the whenever function with the one from the library (import org.mockito.kotlin.whenever).
 
 ```xml
 <dependency>
-    <groupId>com.nhaarman.mockitokotlin2</groupId>
+    <groupId>org.mockito.kotlin</groupId>
     <artifactId>mockito-kotlin</artifactId>
-    <version>2.2.0</version>
+    <version>3.2.0</version>
 </dependency>
 ```
 
 
 ### Write an application test
 
-This application stems from [start.spring.io](http://start.spring.io) and because of that it features a test setup already, for application tests. We are converting our codebase to Kotlin though, so that means we can't really leave this one in its Java form. That would just be silly. 
-
-**Exercise**: Convert the BootiqueApplicationTests.java file to Kotlin using IntelliJ (menu > Code > Convert Java File to Kotlin File).
-
 We are going to test the app by calling an endpoint, so we'll be modifying the test. We are first going to tell Spring Boot to start a server (on a random port) and will wire in a TestRestTemplate to call the service.
 
 First, we'll need to configure the web environment to test against. Modify the `@SpringBootTest` annotation like below.
 
-For JUnit 4
-
 ```java
-@RunWith(SpringRunner::class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-```
-
-For JUnit 5
-
-```java
-@ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 ```
 
@@ -247,7 +207,7 @@ val products = response.body!!
 
 The response body will be of type `List<Product>` thanks to the usage of the `ParameterizedTypeReference` which helps Spring work out the collection generic type for calls returning collections. This way the `exchange` method will return a `ResponseBody<List<Product>>`. It is a bit verbose though, and requires the use of an anonymous inner class, which in Kotlin is defined using `object : ParameterizedTypeReference<List<Product>>() {}`. This class does not define any abstract method so we can just provide an empty body, but we would have to provide it in every test method.
 
-**Exercise**: Create the test method and add the call listed above to it. Also add an assert to check if the first item in the list has a title with value `"iPhone X"`. Run the test, it should run properly and succeed (provided you built it right) :)
+**Exercise**: Create the test method and add the call listed above to it. Also add an assert to check if the first item in the list has a title with value `"iPhone XX"`. Run the test, it should run properly and succeed (provided you built it right) :)
 
 <details>
 <summary>Suggested solution</summary>
@@ -262,7 +222,7 @@ fun `get products endpoint should return a list of products`() {
 
     val products = response.body!!
     assertThat(products.size).isEqualTo(4)
-    assertThat(products.first().title).isEqualTo("iPhone X")
+    assertThat(products.first().title).isEqualTo("iPhone XX")
 }
 ```
 
@@ -331,7 +291,7 @@ fun `add product to basket results in updated basket`() {
 
 ```kotlin
 val headers = HttpHeaders()
-headers.contentType = MediaType.APPLICATION_XML
+headers.contentType = MediaType.APPLICATION_JSON
 val entity = HttpEntity(body, headers)
 ```
 
@@ -361,12 +321,6 @@ That's it, you've done it!
 
 Of course, we are well aware that these tests are somewhat representative of the real-world tests you'll be building, but lack refinement. We hope this will give you the insights you'll need to be able to write some solid tests in Kotlin and at the same time leverage the language features to reduce the volume of code you'll need to write to achieve this.
 
-**So, we encourage you to experiment, experiment and experiment some more. Kotlin might just be that Java replacement you didn't know you'd like so much.**
-
 For the final implementation of this service including the tests above in Kotlin, checkout the [`final` solution branch](https://github.com/sourcelabs-nl/kotlin-bootique-exercises/tree/final).
 
 ## Thank you for participating! ##
-
-- Questions? Come find us, we'll do all we can to clarify anything unclear. 
-
-- Want us to provide this workshop for your whole project team? Let us know, we'll make it happen! If you provide the location, we'll provide the material. No additional costs.
