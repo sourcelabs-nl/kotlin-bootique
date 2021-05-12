@@ -122,15 +122,13 @@ This workshop consist of several exercises that will guide you through the proce
 
 By checking out each exercise branch, you will start of with a working implementation of the previous exercise.
 
-The lines marked with: **Exercise** are the task that need to be performed!
-
 You can start your journey now by switching to the exercise-1 branch, either by using IntelliJ or, by issue the following command in your terminal:
 
 ```
 git checkout exercise-1
 ```
 
-Please keep this documentation open in your browser while completing the exercises.
+Please keep this documentation open in your browser while completing the exercises. The lines marked with: **Exercise** are the task that need to be performed!
 
 The documentation for the first exercise can be found here: [exercise-1.md](./exercise-1.md)
 
