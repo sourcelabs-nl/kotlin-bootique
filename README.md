@@ -52,7 +52,7 @@ IntelliJ Ultimate Edition is preferred but IntelliJ Community will also work. In
 The Kotlin Bootique exercises can be found in a separate git repository. Please clone the source to your local machine from github:
 
 ```
-git clone https://github.com/sourcelabs-nl/kotlin-bootique-exercises.git
+git clone https://github.com/sourcelabs-nl/kotlin-bootique-exercises
 ```
 
 Keep this documentation open in your browser while completing the exercises.
@@ -85,7 +85,9 @@ You can launch the BootiqueApplication by running the project using the spring-b
 
 The Kotlin Bootique application exposes a Swagger endpoint that allows you to explore the API: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
-Alternatively you can also execute request inside IntelliJ against the API using the provided [HTTP Request files](./http) in the [/http](./http) folder or using curl. 
+Alternatively you can also execute request inside IntelliJ against the API using the provided [HTTP Request files](./http) in the [/http](./http) folder or by using curl on the command-line.
+
+![HTTP Request in IntelliJ](./images/http-request.png)
 
 #### Products
 
@@ -114,7 +116,9 @@ curl -H "Content-Type: application/json" -X POST -d '{"productId":"2","quantity"
 
 ### Next steps
 
-This workshop consist of several exercises that will guide you through the process of converting the Java code to Kotlin. Each of the exercises are in the kotlin-bootique-exercises project on an separate git branch. 
+This workshop consist of several exercises that will guide you through the process of converting the Java code to Kotlin. Each of the exercises are in the [kotlin-bootique-exercises](https://github.com/sourcelabs-nl/kotlin-bootique-exercises) project on an separate git branch. 
+
+![HTTP Request in IntelliJ](./images/branches.png)
 
 By checking out each exercise branch, you will start of with a working implementation of the previous exercise.
 
