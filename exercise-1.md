@@ -12,7 +12,7 @@ Prepare the maven pom.xml for Kotlin.
 
 ```xml
 <properties>
-    <kotlin.version>1.5.0</kotlin.version>
+    <kotlin.version>1.5.10</kotlin.version>
     <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
     ...
 </properties>

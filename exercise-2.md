@@ -91,7 +91,7 @@ data class OrderItem @JsonCreator constructor(@JsonProperty("productId") val pro
 A much better approach would be to avoid having to deal with null values all together and not having to worry about potential NPEs. 
 We can do this by providing a default value for the price argument. This way we can construct the OrderItem without explicitly providing a value for price, but it will never be null. In the Java version price was assigned the value of BigDecimal.ZERO, use that here as well. 
 
-**Exercise**: assign a default value, BigDecimal.ZERO to the price argument.
+**Exercise**: assign a default value, BigDecimal.ZERO to the price argument. Run the application, does it work now? No, we need to complete the other exercises below first!
 
 <details>
   <summary>Suggested solution:</summary>
@@ -111,7 +111,7 @@ In the code snippet above the constructor arguments are all immutable now, which
 
 The `val totalPrice` which is called a property in Kotlin, calculates the totalPrice based on two immutable properties (price and quantity). Since both properties are `vals` (immutable) we can get rid of the get() method on the property. Getters on properties are useful when the expression needs to be evaluated every time the property is accessed.  
 
-But the solutin is not yet the idiomatic Kotlin way of writing code, because it would be even nicer if we could write it like:
+But the solution is not yet the idiomatic Kotlin way of writing code, because it would be even nicer if we could write it like:
 
 ```kotlin
 val totalPrice: BigDecimal = price * quantity
