@@ -8,7 +8,7 @@ Let's start out by finally adding a simple unit test. Normally of course we woul
 
 In the `src/main/test` folder the file BootiqueControllerTest should be available. It has no contents yet, this is left for you to provide.
 
-We are going to be using a mocking framework to mock our dependencies. Spring Boot conveniently bundles Mockito so let's use that. First thing to do now, is to add the MockitoExtension to the test class. This would look something like the listing below.
+We are going to be using a mocking framework to mock our dependencies. Spring Boot bundles Mockito but for Kotlin applications there are other alternatives like MockK/SpringMockK. Since the Java version was using Mockito, lets use that for now. First thing to do now, is to add the MockitoExtension to the test class. This would look something like the listing below.
 
 ```kotlin
 import org.junit.jupiter.api.Test
@@ -156,7 +156,8 @@ You can also add a useful library to your codebase named [mockito-kotlin](https:
 
 ### Write an application test
 
-We are going to test the app by calling an endpoint, so we'll be modifying the test. We are first going to tell Spring Boot to start a server (on a random port) and will wire in a TestRestTemplate to call the service.
+Spring provides multiple different ways of testing your application code. For example, you could test you web layer in isolation by using @WebMvcTest. But you can also bootstrap your entire Spring Boot application using a @SpringBootTest. 
+In this exercise we are going to test our Spring Boot application using @SpringBootTest by calling an endpoint from our test case, so we'll be modifying the test for this. We are first going to tell Spring Boot to start a server (on a random port) and will wire in a TestRestTemplate to call the service.
 
 First, we'll need to configure the web environment to test against. Modify the `@SpringBootTest` annotation like below.
 
